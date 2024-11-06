@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">grouplab</string>
+    <string name="nutritrack">NutriTrack</string>
+    <string-array name="titles_array">
+        <item>Mr.</item>
+        <item>Ms.</item>
+        <item>Mrs.</item>
+        <item>Dr.</item>
+    </string-array>
+</resources>
