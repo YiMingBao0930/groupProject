@@ -14,4 +14,40 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/homepage" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="202dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="121dp"
+        android:text="Planning create a PieChart with animation which shows protein, Carbohydrates, and Fat that user been record today, and when you click it,it will goes to another page with more details"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="202dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="350dp"
+        android:text="Here we create a circular icon with an empty center to record the user's daily exercise calorie consumption and exercise duration."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/jumptoscanpage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="656dp"
+        android:contentDescription="KotlinQRCodeSCanner"
+        android:src="@drawable/qrcode_scan"
+        app:backgroundTint="@color/cadmium_violet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:tint="@android:color/white" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
