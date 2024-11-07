@@ -7,18 +7,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="455dp"
-        android:layout_height="772dp"
+        android:layout_width="598dp"
+        android:layout_height="852dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/homepage" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ExerciseCostHere"
-        tools:layout_editor_absoluteX="149dp"
-        tools:layout_editor_absoluteY="263dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

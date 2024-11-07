@@ -5,16 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Email Field -->
+
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="455dp"
-        android:layout_height="776dp"
-        app:layout_constraintBottom_toBottomOf="@+id/passwordEditText"
+        android:layout_width="450dp"
+        android:layout_height="789dp"
+
+        app:layout_constraintBaseline_toBaselineOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditText"
         app:srcCompat="@drawable/signin" />
-    <!-- Email Field -->
+
     <TextView
         android:id="@+id/emailLabel"
         android:layout_width="wrap_content"
@@ -25,37 +29,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Title Dropdown -->
+
+    <!-- Email Confirmation Field -->
+
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Email"
         app:layout_constraintEnd_toStartOf="@+id/titleSpinner"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailLabel"
         app:layout_constraintWidth_percent="0.5" />
-    <!-- Title Dropdown -->
 
     <TextView
         android:id="@+id/titleLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="11dp"
+        android:layout_marginTop="24dp"
         android:text="Title*"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/titleSpinner"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.315"
+        app:layout_constraintHorizontal_bias="0.234"
         app:layout_constraintStart_toEndOf="@+id/emailEditText"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Email Confirmation Field -->
-
     <Spinner
         android:id="@+id/titleSpinner"
-        android:layout_width="134dp"
-        android:layout_height="0dp"
+        android:layout_width="132dp"
+        android:layout_height="19dp"
         android:layout_marginEnd="68dp"
         android:layout_marginBottom="657dp"
         android:background="#FFFFFF"
@@ -63,6 +68,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleLabel"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent="0.5" />
 
     <TextView
