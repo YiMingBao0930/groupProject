@@ -7,4 +7,10 @@
         <item>Mrs.</item>
         <item>Dr.</item>
     </string-array>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="register">Create New Account</string>
+    <string name="confirm_password_hint">Confirm Password</string>
 </resources>

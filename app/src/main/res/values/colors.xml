@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="project_background">#161616</color>
+    <color name="project_accent">#B7EDB3</color>
 </resources>
