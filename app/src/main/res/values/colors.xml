@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="project_background">#161616</color>
+    <color name="project_background">#000000</color>
     <color name="project_accent">#B7EDB3</color>
     <color name="cadmium_violet">#8541A9</color>
     <color name="project_hint">#909090</color>
