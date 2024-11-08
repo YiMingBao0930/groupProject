@@ -39,7 +39,6 @@ android {
         viewBinding = true
     }
 }
-
 dependencies {
     implementation("androidx.compose.ui:ui:1.5.3")
     implementation("androidx.compose.material:material:1.5.3")

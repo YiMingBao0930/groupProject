@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/project_background"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/project_background"
+        android:paddingTop="30dp"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/curWeightTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="79dp"
+        android:hint="@string/current_weight"
+        android:textColorHint="@color/project_hint"
+        app:boxBackgroundColor="@color/project_sub"
+        app:boxStrokeColor="@color/project_hint"
+        app:endIconDrawable="@drawable/baseline_arrow_back_24"
+        app:cursorColor="@color/project_accent"
+        app:suffixText="@string/weight_unit"
+        app:helperTextTextColor="@color/project_hint"
+        app:hintTextColor="@color/hint_color_state"
+        app:suffixTextColor="@color/project_accent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/curWeightTextEdit"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/montserrat_semibold"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textColor="@color/white"
+            app:hintTextColor="@color/hint_color_state" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/goalWeightTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="73dp"
+        android:hint="@string/goal_weight"
+        android:textColorHint="@color/project_hint"
+        app:boxBackgroundColor="@color/project_sub"
+        app:boxStrokeColor="@color/project_hint"
+        app:cursorColor="@color/project_accent"
+        app:helperTextTextColor="@color/project_hint"
+        app:hintTextColor="@color/hint_color_state"
+        app:suffixText="@string/weight_unit"
+        app:suffixTextColor="@color/project_accent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/goalWeightTextEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:inputType="number"
+            android:textColor="@color/white"
+            app:hintTextColor="@color/hint_color_state" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/goalDate_button"
+        android:layout_width="320dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/project_accent"
+        app:cornerRadius="24dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center"
+        android:text="@string/days_goal"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="Select Activity Level"
+        android:textColor="@color/project_hint"
+        android:paddingTop="10dp" />
+
+    <Spinner
+        android:id="@+id/activityLevelSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@color/project_sub"
+        android:spinnerMode="dropdown" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/recommendedCaloriesTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="73dp"
+        android:hint="@string/calorie_recommend"
+        android:textColorHint="@color/project_hint"
+        app:boxBackgroundColor="@color/project_sub"
+        app:boxStrokeColor="@color/project_hint"
+        app:cursorColor="@color/project_accent"
+        app:helperTextTextColor="@color/project_hint"
+        app:hintTextColor="@color/hint_color_state"
+        app:suffixText="@string/calorie_unit"
+        app:helperText="@string/calorie_edit"
+        app:suffixTextColor="@color/project_accent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/recommendedCaloriesTextEdit"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/montserrat_semibold"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textColor="@color/white"
+            app:hintTextColor="@color/hint_color_state" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        android:background="@color/project_sub"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/proteinPTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center_vertical"
+                android:text="Protein: 0%"
+                android:textColor="@color/protein_color"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/proteinGTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center_vertical"
+                android:text="Protein: 0 g"
+                android:textColor="@color/protein_color"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fatPTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center_vertical"
+                android:text="Fat: 0%"
+                android:textColor="@color/fat_color"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/fatGTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Fat: 0 g"
+                android:textColor="@color/fat_color"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/carbsPTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center_vertical"
+                android:text="Carbs: 0%"
+                android:textColor="@color/carb_color"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/carbsGTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="center_vertical"
+                android:text="Carbs: 0 g"
+                android:textColor="@color/carb_color"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+    <com.google.android.material.slider.Slider
+        android:id="@+id/proteinSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="100"
+        android:stepSize="1"
+        app:trackColorActive="@color/protein_color"
+        app:thumbColor="@color/white"
+        app:tickColor="@color/project_background"
+        app:trackColorInactive="@color/protein_color"
+        app:thumbTint="@color/white" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/fatSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="100"
+        android:stepSize="1"
+        app:trackColorActive="@color/fat_color"
+        app:thumbColor="@color/white"
+        app:tickColor="@color/project_background"
+        app:trackColorInactive="@color/fat_color"
+        app:thumbTint="@color/fat_color" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/carbsSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="100"
+        android:stepSize="1"
+        app:tickColor="@color/project_background"
+        app:trackColorActive="@color/carb_color"
+        app:trackColorInactive="@color/carb_color"
+        app:thumbColor="@color/white"
+        app:thumbTint="@color/carb_color" />
+
+
+
+</LinearLayout>

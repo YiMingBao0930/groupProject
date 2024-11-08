@@ -13,4 +13,13 @@
     <string name="password_hint">Password</string>
     <string name="register">Create New Account</string>
     <string name="confirm_password_hint">Confirm Password</string>
+    <string name="set_goal">Set New Goal</string>
+    <string name="current_weight">Current Weight</string>
+    <string name="goal_weight">Weight Goal</string>
+    <string name="weight_unit">lbs</string>
+    <string name="calorie_recommend">Recommended Calories</string>
+    <string name="calorie_unit">kCal/day</string>
+    <string name="calorie_edit">Tap to Edit Calories</string>
+    <string name="create_account">Create Account</string>
+    <string name="days_goal">Goal Date</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.cs407.grouplab
 
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
