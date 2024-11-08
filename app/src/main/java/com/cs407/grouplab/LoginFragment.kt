@@ -41,7 +41,7 @@ class LoginFragment : Fragment() {
                 if (storedHashedPassword == hashedPassword) {
                     // Correct username and password
                     Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(requireContext(), SignInActivity::class.java)
+                    val intent = Intent(requireContext(), AppHomePage::class.java)
                     startActivity(intent)
                 } else {
                     // Incorrect password

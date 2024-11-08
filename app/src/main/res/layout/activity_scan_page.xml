@@ -9,18 +9,14 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_result"
-        android:layout_width="274dp"
-        android:layout_height="258dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="248dp"
-        android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="100dp"
-            android:layout_height="200dp"
+            android:layout_height="100dp"
             android:src="@drawable/qrcode_scan" />
 
         <TextView
@@ -31,17 +27,18 @@
             android:textSize="26sp"
             android:textStyle="bold" />
 
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:backgroundTint="@color/cadmium_violet"
         app:fabCradleMargin="10dp"
         app:fabCradleRoundedCornerRadius="10dp"
-        app:fabCradleVerticalOffset="10dp"
-        app:layout_anchorGravity="bottom" />
+        app:fabCradleVerticalOffset="10dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
