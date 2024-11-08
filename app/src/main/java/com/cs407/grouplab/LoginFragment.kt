@@ -10,6 +10,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.TextView
 
 class LoginFragment : Fragment() {
     override fun onCreateView(
@@ -23,6 +26,25 @@ class LoginFragment : Fragment() {
         val passwordEditText: EditText = view.findViewById(R.id.passwordEditText)
         val signInButton: Button = view.findViewById(R.id.signin_button)
         val registerButton: Button = view.findViewById(R.id.register_button)
+
+        //declare the animation
+        val ttb = AnimationUtils.loadAnimation(requireContext(), R.anim.ttb);
+        val stb = AnimationUtils.loadAnimation(requireContext(), R.anim.stb);
+        val btt = AnimationUtils.loadAnimation(requireContext(), R.anim.btt);
+        val btt2 = AnimationUtils.loadAnimation(requireContext(), R.anim.btt2);
+        val btt3 = AnimationUtils.loadAnimation(requireContext(), R.anim.btt3);
+        val btt4 = AnimationUtils.loadAnimation(requireContext(), R.anim.btt4);
+
+        val headertitle = view?.findViewById<TextView>(R.id.headertitle)
+        val logo = view?.findViewById<ImageView>(R.id.logo)
+
+        //set the animation
+        headertitle?.startAnimation(ttb)
+        logo?.startAnimation(stb)
+        usernameEditText.startAnimation(btt)
+        passwordEditText.startAnimation(btt2)
+        signInButton.startAnimation(btt3)
+        registerButton.startAnimation(btt4)
 
         // Set up SharedPreferences
         val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
@@ -77,4 +99,5 @@ class LoginFragment : Fragment() {
         val hashBytes = digest.digest(password.toByteArray())
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
+
 }

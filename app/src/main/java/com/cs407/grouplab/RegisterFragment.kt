@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -26,6 +28,21 @@ class RegisterFragment : Fragment() {
         val confirmPasswordEditText: EditText = view.findViewById(R.id.confirmPasswordEditText)
         val registerButton: Button = view.findViewById(R.id.registerButton)
 
+        //declare the animation
+        val ttb = AnimationUtils.loadAnimation(requireContext(), R.anim.ttb);
+        val btt = AnimationUtils.loadAnimation(requireContext(), R.anim.btt);
+        val btt2 = AnimationUtils.loadAnimation(requireContext(), R.anim.btt2);
+        val btt3 = AnimationUtils.loadAnimation(requireContext(), R.anim.btt3);
+        val btt4 = AnimationUtils.loadAnimation(requireContext(), R.anim.btt4);
+
+        val registerTitle = view?.findViewById<TextView>(R.id.registerTitle)
+
+        registerTitle?.startAnimation(ttb)
+        usernameEditText.startAnimation(btt)
+        passwordEditText.startAnimation(btt2)
+        confirmPasswordEditText.startAnimation(btt3)
+        registerButton.startAnimation(btt4)
+
         // Set up SharedPreferences
         val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
 
@@ -33,6 +50,7 @@ class RegisterFragment : Fragment() {
             val username = usernameEditText.text.toString().trim()
             val password = passwordEditText.text.toString()
             val confirmPassword = confirmPasswordEditText.text.toString()
+
 
             // Check if the username already exists
             if (sharedPreferences.contains(username)) {
