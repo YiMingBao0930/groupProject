@@ -89,7 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_semibold"
-        android:text="Select Activity Level"
+        android:text="@string/activity_level"
         android:textColor="@color/project_hint"
         android:paddingTop="10dp" />
 
@@ -137,7 +137,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="104dp"
+        android:layout_height="50dp"
         android:background="@color/project_sub"
         android:orientation="horizontal">
 
@@ -191,8 +191,8 @@
                 android:id="@+id/fatGTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_semibold"
                 android:layout_weight="1"
+                android:fontFamily="@font/montserrat_semibold"
                 android:gravity="center_vertical"
                 android:text="Fat: 0 g"
                 android:textColor="@color/fat_color"
@@ -229,6 +229,11 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+
     <com.google.android.material.slider.Slider
         android:id="@+id/proteinSlider"
         android:layout_width="match_parent"
@@ -267,6 +272,24 @@
         app:trackColorInactive="@color/carb_color"
         app:thumbColor="@color/white"
         app:thumbTint="@color/carb_color" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirm_goal"
+        android:layout_width="320dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/project_accent"
+        app:cornerRadius="24dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center"
+        android:text="@string/confirm_goal"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
 
 

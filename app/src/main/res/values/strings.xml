@@ -22,4 +22,6 @@
     <string name="calorie_edit">Tap to Edit Calories</string>
     <string name="create_account">Create Account</string>
     <string name="days_goal">Goal Date</string>
+    <string name="activity_level">Select Activity Level</string>
+    <string name="confirm_goal">Confirm Goal</string>
 </resources>

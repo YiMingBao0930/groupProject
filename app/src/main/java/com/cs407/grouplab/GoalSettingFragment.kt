@@ -2,6 +2,8 @@ package com.cs407.grouplab
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +15,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.Slider
+import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 
 class GoalSettingFragment : Fragment() {
@@ -38,6 +46,7 @@ class GoalSettingFragment : Fragment() {
 
     // Example base caloric intake
     private var baseCalories = 2000
+    private var recommendedCalories = 2000 // Initialize recommendedCalories
     private var isAdjusting = false // Prevent recursive updates
 
     override fun onCreateView(
@@ -80,6 +89,20 @@ class GoalSettingFragment : Fragment() {
             showDatePickerDialog()
         }
 
+        // Set up TextWatcher for recommendedCaloriesTextEdit
+        recommendedCaloriesTextEdit.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Update recommendedCalories and recalculate values
+                val caloriesText = s.toString()
+                recommendedCalories = caloriesText.toIntOrNull() ?: 2000 // Default to 2000 if input is invalid
+                updateTextViews() // Recalculate values
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         // Set up the activity level spinner
         val activityLevels = arrayOf(
             "Sedentary (little or no exercise)",
@@ -105,6 +128,8 @@ class GoalSettingFragment : Fragment() {
         goalWeightTextEdit.addTextChangedListener(weightTextWatcher)
 
         // Calculate calories whenever the activity level is changed
+        curWeightTextEdit.addTextChangedListener(weightTextWatcher)
+        goalWeightTextEdit.addTextChangedListener(weightTextWatcher)
         activityLevelSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 calculateRecommendedCalories()
@@ -124,34 +149,56 @@ class GoalSettingFragment : Fragment() {
         override fun afterTextChanged(s: android.text.Editable?) {}
     }
 
+
     private fun calculateRecommendedCalories() {
         val curWeightText = curWeightTextEdit.text.toString()
         val goalWeightText = goalWeightTextEdit.text.toString()
+        val goalDateText = goalDateButton.text.toString()
 
-        if (curWeightText.isNotEmpty() && goalWeightText.isNotEmpty()) {
+        // Check if all required fields are filled and the goal date is valid
+        if (curWeightText.isNotEmpty() && goalWeightText.isNotEmpty() && goalDateText != "Goal Date") {
             val currentWeight = curWeightText.toFloatOrNull()
             val goalWeight = goalWeightText.toFloatOrNull()
 
             if (currentWeight != null && goalWeight != null) {
-                // Simple calorie adjustment logic
-                val weightDifference = goalWeight - currentWeight
-                val calorieAdjustment = (weightDifference * 500).roundToInt() // 500 calories per pound of weight change
+                try {
+                    // Parse the goal date
+                    val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                    val goalDate = sdf.parse(goalDateText)
+                    val today = Calendar.getInstance().time
 
-                // Adjust base calories based on activity level
-                val activityFactor = when (activityLevelSpinner.selectedItemPosition) {
-                    0 -> 1.2f // Sedentary
-                    1 -> 1.375f // Lightly Active
-                    2 -> 1.55f // Moderately Active
-                    3 -> 1.725f // Very Active
-                    4 -> 1.9f // Extra Active
-                    else -> 1.2f
+                    // Calculate days until goal date
+                    val daysUntilGoal = ((goalDate!!.time - today.time) / (1000 * 60 * 60 * 24)).toInt()
+
+                    // Calculate daily calorie adjustment
+                    val weightDifference = goalWeight - currentWeight
+                    val totalCalorieChange = (weightDifference * 3500).toInt() // 3500 calories per pound
+                    val dailyCalorieChange = (totalCalorieChange / daysUntilGoal).coerceIn(-1000, 1000)
+
+                    // Adjust base calories based on activity level
+                    val activityFactor = when (activityLevelSpinner.selectedItemPosition) {
+                        0 -> 1.2f // Sedentary
+                        1 -> 1.375f // Lightly Active
+                        2 -> 1.55f // Moderately Active
+                        3 -> 1.725f // Very Active
+                        else -> 1.2f
+                    }
+
+                    recommendedCalories = ((baseCalories + dailyCalorieChange) * activityFactor).roundToInt()
+                    recommendedCaloriesTextEdit.setText("$recommendedCalories")
+
+                    // Update macronutrient ratios
+                    setDefaultMacroRatios()
+                    updateTextViews()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    // Handle any parsing errors
                 }
-
-                val recommendedCalories = ((baseCalories + calorieAdjustment) * activityFactor).roundToInt()
-                recommendedCaloriesTextEdit.text = "$recommendedCalories"
             }
         }
     }
+
+
 
     private fun adjustRatios(value: Int, sliderType: String) {
         if (isAdjusting) return // Prevent recursive updates
@@ -209,11 +256,12 @@ class GoalSettingFragment : Fragment() {
     }
 
     private fun updateTextViews() {
-        // Calculate grams based on calories
-        val proteinCalories = (baseCalories * (proteinSlider.value / 100)).toInt()
-        val fatCalories = (baseCalories * (fatSlider.value / 100)).toInt()
-        val carbsCalories = (baseCalories * (carbsSlider.value / 100)).toInt()
+        // Calculate grams based on recommendedCalories
+        val proteinCalories = (recommendedCalories * (proteinSlider.value / 100)).toInt()
+        val fatCalories = (recommendedCalories * (fatSlider.value / 100)).toInt()
+        val carbsCalories = (recommendedCalories * (carbsSlider.value / 100)).toInt()
 
+        // Convert calories to grams
         val proteinGrams = proteinCalories / 4 // 4 calories per gram of protein
         val fatGrams = fatCalories / 9 // 9 calories per gram of fat
         val carbsGrams = carbsCalories / 4 // 4 calories per gram of carbs
@@ -223,27 +271,52 @@ class GoalSettingFragment : Fragment() {
         fatPTextView.text = "Fat: ${fatSlider.value.toInt()}%"
         carbsPTextView.text = "Carbs: ${carbsSlider.value.toInt()}%"
 
-        // Update gram TextViews
+        // Update gram TextViews with the correct values
         proteinGTextView.text = "Protein: $proteinGrams g"
         fatGTextView.text = "Fat: $fatGrams g"
         carbsGTextView.text = "Carbs: $carbsGrams g"
     }
 
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            { _, selectedYear, selectedMonth, selectedDay ->
-                // Format the date and display it
-                val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
-                goalDateButton.text = formattedDate
-            },
-            year, month, day
-        )
-        datePickerDialog.show()
+    private fun setDefaultMacroRatios() {
+        proteinSlider.value = 30f // 30% Protein
+        fatSlider.value = 25f // 25% Fat
+        carbsSlider.value = 45f // 45% Carbs
+        updateTextViews()
     }
+
+    private fun showDatePickerDialog() {
+        // Get the current time in milliseconds
+        val calendar = Calendar.getInstance()
+        val todayInMillis = calendar.timeInMillis
+
+        // Set up constraints to allow only future dates
+        val constraintsBuilder = CalendarConstraints.Builder()
+            .setStart(todayInMillis) // Start from today
+            .setValidator(DateValidatorFromToday()) // Use the custom DateValidator
+
+        // Create the MaterialDatePicker
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setCalendarConstraints(constraintsBuilder.build())
+            .setTitleText("Select Goal Date")
+            .setTheme(R.style.CustomMaterialDatePicker) // Apply the custom theme
+            .build()
+
+        // Show the date picker
+        datePicker.show(parentFragmentManager, "MATERIAL_DATE_PICKER")
+
+        // Handle the date selection
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            // Use Calendar to properly adjust for the timezone
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = selection
+
+            // Format the adjusted calendar date
+            val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+            val formattedDate = dateFormat.format(calendar.time)
+
+            goalDateButton.text = formattedDate
+        }
+    }
+
 }
