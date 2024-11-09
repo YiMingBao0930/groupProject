@@ -28,6 +28,7 @@
         app:endIconDrawable="@drawable/baseline_arrow_back_24"
         app:cursorColor="@color/project_accent"
         app:suffixText="@string/weight_unit"
+        app:errorEnabled="true"
         app:helperTextTextColor="@color/project_hint"
         app:hintTextColor="@color/hint_color_state"
         app:suffixTextColor="@color/project_accent">
@@ -52,6 +53,7 @@
         android:textColorHint="@color/project_hint"
         app:boxBackgroundColor="@color/project_sub"
         app:boxStrokeColor="@color/project_hint"
+        app:errorEnabled="true"
         app:cursorColor="@color/project_accent"
         app:helperTextTextColor="@color/project_hint"
         app:hintTextColor="@color/hint_color_state"

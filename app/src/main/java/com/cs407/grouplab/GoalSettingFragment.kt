@@ -1,6 +1,7 @@
 package com.cs407.grouplab
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 import java.util.Calendar
@@ -42,6 +44,7 @@ class GoalSettingFragment : Fragment() {
     private lateinit var recommendedCaloriesTextEdit: TextView
     private lateinit var activityLevelSpinner: Spinner
     private lateinit var goalDateButton: Button
+    private lateinit var confirmGoalButton: Button
 
 
     // Example base caloric intake
@@ -83,6 +86,7 @@ class GoalSettingFragment : Fragment() {
         activityLevelSpinner = view.findViewById(R.id.activityLevelSpinner)
 
         goalDateButton = view.findViewById(R.id.goalDate_button)
+        confirmGoalButton = view.findViewById((R.id.confirm_goal))
 
         // Set up the DatePickerDialog
         goalDateButton.setOnClickListener {
@@ -138,7 +142,57 @@ class GoalSettingFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        // Set up the Confirm Goal button click listener
+        confirmGoalButton.setOnClickListener {
+            if (validateInputs()) {
+                // All inputs are valid, go to home page
+                val intent = Intent(requireContext(), AppHomePage::class.java)
+                startActivity(intent)
+
+            }
+            else {
+                Snackbar.make(view, "One or more fields aren't filled out", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+
+
         return view
+    }
+
+    private fun validateInputs(): Boolean {
+        var isValid = true
+
+        // Check if current weight is filled
+        if (curWeightTextEdit.text.isEmpty()) {
+            curWeightTextEdit.error = "Current weight is required"
+            isValid = false
+        } else {
+            curWeightTextEdit.error = null
+        }
+
+        // Check if goal weight is filled
+        if (goalWeightTextEdit.text.isEmpty()) {
+            goalWeightTextEdit.error = "Goal weight is required"
+            isValid = false
+        } else {
+            goalWeightTextEdit.error = null
+        }
+
+        // Check if goal date is selected
+        if (goalDateButton.text == "Goal Date") {
+            goalDateButton.error = "Please select a goal date"
+            isValid = false
+        } else {
+            goalDateButton.error = null
+        }
+
+        // Check if activity level is selected
+        if (activityLevelSpinner.selectedItemPosition == AdapterView.INVALID_POSITION) {
+            isValid = false
+        }
+
+        return isValid
     }
 
     private val weightTextWatcher = object : android.text.TextWatcher {
