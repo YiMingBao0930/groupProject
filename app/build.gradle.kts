@@ -47,6 +47,18 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.4.1")
 
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.activity:activity-compose:1.7.2")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.0.1")
+
+
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    testImplementation ("junit:junit:4.13.2")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.0")
+
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -63,3 +75,4 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+
