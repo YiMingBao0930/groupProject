@@ -2,8 +2,6 @@ package com.cs407.grouplab
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -30,13 +28,13 @@ class AppHomePage : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_food -> {
-                    val intent = Intent(this, NutritionPage::class.java)
+                    val intent = Intent(this, Food::class.java)
                     startActivity(intent)
                     true
                 }
                 // Handle other menu items
                 R.id.nav_calendar -> {
-                    // Handle calendar selection
+
                     true
                 }
                 R.id.nav_walk -> {
@@ -48,7 +46,8 @@ class AppHomePage : AppCompatActivity() {
                     true
                 }
                 R.id.nav_stats -> {
-                    // Handle stats selection
+                    val intent = Intent(this, Stats::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false

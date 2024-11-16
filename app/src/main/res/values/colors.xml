@@ -10,4 +10,5 @@
     <color name="protein_color">#C0FFBE59</color>
     <color name="carb_color">#C0FF6F3B</color>
     <color name="fat_color">#C059E8FE</color>
+    <color name="gray">#e0e0e0</color>
 </resources>
