@@ -57,6 +57,12 @@ dependencies {
     testImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.0")
 
+    implementation("com.google.android.material:material:1.2.0")
+    implementation("com.makeramen:roundedimageview:2.3.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.4")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.4")
+
+
 
 
     implementation(libs.androidx.core.ktx)

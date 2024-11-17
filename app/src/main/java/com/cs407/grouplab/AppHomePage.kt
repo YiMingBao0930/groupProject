@@ -1,8 +1,14 @@
 package com.cs407.grouplab
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -17,11 +23,9 @@ class AppHomePage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app_home_page)
+        setContentView(R.layout.home_page)
 
         setupPieChart()
-
-
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
@@ -53,6 +57,15 @@ class AppHomePage : AppCompatActivity() {
                 else -> false
             }
         }
+
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
+        val settingButton: ImageView = findViewById(R.id.settingButton)
+
+        settingButton.setOnClickListener {
+            // Open the navigation drawer
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
+
     }
 
     private fun setupPieChart() {

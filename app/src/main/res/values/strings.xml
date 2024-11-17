@@ -24,4 +24,9 @@
     <string name="days_goal">Goal Date</string>
     <string name="activity_level">Select Activity Level</string>
     <string name="confirm_goal">Confirm Goal</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="appearance">Appearance</string>
+    <string name="accountSetting">Account Setting</string>
+    <string name="yourGoals">Your Goals</string>
+    <string name="about">About</string>
 </resources>
