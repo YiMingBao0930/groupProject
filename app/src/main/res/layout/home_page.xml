@@ -8,7 +8,6 @@
     android:background="@color/project_background">
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,6 +28,32 @@
             app:menu="@menu/bottom_nav_menu" />
 
 
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="171dp"
+            android:layout_height="23dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.068"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ProgressBar
+                android:id="@+id/_progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="150dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="1dp"
+                android:indeterminate="false"
+                android:progressDrawable="@drawable/purple_rounded_corners"
+                android:scaleY="1" />
+
+
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/settingButton"
             android:layout_width="40dp"
@@ -43,18 +68,90 @@
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/chart"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="68dp"
-            android:layout_marginBottom="371dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            android:layout_width="408dp"
+            android:layout_height="256dp"
+            android:layout_marginBottom="500dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="219dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="104dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/powder_blue_rounded_corners"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/circle"
+                android:src="@drawable/ic_red_circle" />
+
+            <TextView
+                android:id="@+id/protein_num"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/protein_num"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/circle"
+                android:src="@drawable/ic_orange_circle" />
+
+            <TextView
+                android:id="@+id/acrbs_num"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/carbs_num"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/circle"
+                android:src="@drawable/ic_yellow_circle" />
+
+            <TextView
+                android:id="@+id/fat_num"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/fat_num"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="322dp"
+            android:layout_height="322dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="352dp"
+            android:orientation="vertical"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/settingButton">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="35sp"
+                android:text="Recommedntation"
+                />
+
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"

@@ -29,4 +29,8 @@
     <string name="accountSetting">Account Setting</string>
     <string name="yourGoals">Your Goals</string>
     <string name="about">About</string>
+    <string name="circle">Circle</string>
+    <string name="protein_num">20g\nProtein</string>
+    <string name="carbs_num">20.0g\ncarbs</string>
+    <string name="fat_num">20.0g\nFats</string>
 </resources>
