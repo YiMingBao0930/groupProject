@@ -38,7 +38,8 @@ class AppHomePage : AppCompatActivity() {
                 }
                 // Handle other menu items
                 R.id.nav_calendar -> {
-
+                    val intent = Intent(this, DailySummary::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_walk -> {
