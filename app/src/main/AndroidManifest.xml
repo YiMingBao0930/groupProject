@@ -33,6 +33,7 @@
         <activity android:name=".Food" />
         <activity android:name=".Stats" />
         <activity android:name=".DailySummary"/>
+        <activity android:name=".ExerciseMenu"/>
 
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

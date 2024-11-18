@@ -43,7 +43,8 @@ class AppHomePage : AppCompatActivity() {
                     true
                 }
                 R.id.nav_walk -> {
-                    // Handle walk selection
+                    val intent = Intent(this, ExerciseMenu::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_home -> {
