@@ -17,5 +17,12 @@ class Food : AppCompatActivity() {
             val intent = Intent(this, ScanPage::class.java)
             startActivity(intent)
         }
+
+        val lastPageButton: ImageButton = findViewById(R.id.back_button)
+        lastPageButton.setOnClickListener {
+            // create Intent to jump to SignInActivity
+            val intent = Intent(this, AppHomePage::class.java)
+            startActivity(intent)
+        }
     }
 }
