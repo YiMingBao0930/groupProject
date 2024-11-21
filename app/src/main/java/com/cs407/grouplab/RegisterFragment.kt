@@ -55,20 +55,10 @@ class RegisterFragment : Fragment() {
             // Check if the username already exists
             if (sharedPreferences.contains(username)) {
                 Snackbar.make(view, "Username already exists!", Snackbar.LENGTH_SHORT).show()
-                // Navigate to GoalSettingFragment
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, GoalSettingFragment())
-                    .addToBackStack(null)
-                    .commit()
 
             } else if (password != confirmPassword) {
                 // Check if passwords match
                 Snackbar.make(view, "Passwords do not match!", Snackbar.LENGTH_SHORT).show()
-                // Navigate to GoalSettingFragment
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, GoalSettingFragment())
-                    .addToBackStack(null)
-                    .commit()
             } else {
                 // Hash the password
                 val hashedPassword = hashPassword(password)
@@ -82,6 +72,12 @@ class RegisterFragment : Fragment() {
 
                 // Navigate to GoalSettingFragment
                 parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left
+                    )
                     .replace(R.id.fragment_container, GoalSettingFragment())
                     .addToBackStack(null)
                     .commit()

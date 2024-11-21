@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScanPage">
+    tools:context=".ScanPageFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout_result"

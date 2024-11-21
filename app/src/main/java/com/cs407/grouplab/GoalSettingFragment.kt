@@ -146,8 +146,17 @@ class GoalSettingFragment : Fragment() {
         confirmGoalButton.setOnClickListener {
             if (validateInputs()) {
                 // All inputs are valid, go to home page
-                val intent = Intent(requireContext(), AppHomePage::class.java)
-                startActivity(intent)
+                val fragment = AppHomePageFragment()
+                parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left
+                    )
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit()
 
             }
             else {
