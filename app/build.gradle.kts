@@ -54,6 +54,8 @@ dependencies {
 
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     testImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.0")
 
