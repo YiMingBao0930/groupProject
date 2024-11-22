@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +28,7 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
     private lateinit var foodRecyclerView: RecyclerView
     private lateinit var noResultsTextView: TextView
     private lateinit var addFoodButton: Button
+    private lateinit var scanButton: ImageButton
     private val foodItemAdapter = FoodItemAdapter(this)
 
     override fun onCreateView(
@@ -42,6 +45,7 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
         foodRecyclerView = view.findViewById(R.id.food_recycler_view)
         noResultsTextView = view.findViewById(R.id.no_results_text_view)
         addFoodButton = view.findViewById(R.id.navigateToAddFood)
+        scanButton = view.findViewById(R.id.jumptoscanpage)
 
         foodRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         foodRecyclerView.adapter = foodItemAdapter
@@ -58,6 +62,22 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
             }
         })
 
+        // Set up the Toolbar
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar_food)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // Enable the back button in the toolbar
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = "" // Hide the toolbar title text
+        }
+
+        // Handle back button click
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack() // Navigate back to the previous fragment
+        }
+
         // Navigate to AddFoodFragment
         addFoodButton.setOnClickListener {
             val fragment = AddFoodFragment()
@@ -68,6 +88,19 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
                     R.anim.slide_in_left,
                     R.anim.slide_out_right
                 )
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+        scanButton.setOnClickListener {
+            val fragment = ScanPageFragment()
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right,
+                 R.anim.slide_out_left,
+                 R.anim.slide_in_left,
+                    R.anim.slide_out_right
+            )
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()

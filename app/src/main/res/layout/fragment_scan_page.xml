@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="@color/cadmium_violet"
+        android:backgroundTint="@color/project_accent"
         app:fabCradleMargin="10dp"
         app:fabCradleRoundedCornerRadius="10dp"
         app:fabCradleVerticalOffset="10dp"/>
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="Scan Barcode"
         android:src="@drawable/qrcode_scan"
-        app:backgroundTint="@color/cadmium_violet"
+        app:backgroundTint="@color/project_accent"
         app:layout_anchor="@id/bottomAppBar"
         app:tint="@android:color/white"/>
 
