@@ -14,6 +14,8 @@ data class OpenFoodProduct(
 
 data class Nutriments(
     val energy_kcal: Float?,
+    val energy_100g: Float?,
+    val energy: Float?,
     val proteins: Float?,
     val carbohydrates: Float?,
     val fat: Float?,
@@ -55,9 +57,19 @@ interface OpenFoodApiService {
 
 // FoodItemMapper.kt
 fun OpenFoodProduct.toFoodItem(): FoodItem {
+    val calories = when {
+        this.nutriments?.energy_kcal != null && this.nutriments.energy_kcal > 0 -> 
+            this.nutriments.energy_kcal.toInt()
+        this.nutriments?.energy_100g != null && this.nutriments.energy_100g > 0 -> 
+            this.nutriments.energy_100g.toInt()
+        this.nutriments?.energy != null && this.nutriments.energy > 0 -> 
+            (this.nutriments.energy / 4.184).toInt()  // Convert kJ to kcal if needed
+        else -> 0
+    }
+
     return FoodItem(
         name = this.product_name ?: "Unknown",
-        calories = this.nutriments?.energy_kcal?.toInt() ?: 0,
+        calories = calories,
         protein = this.nutriments?.proteins?.toInt() ?: 0,
         carbs = this.nutriments?.carbohydrates?.toInt() ?: 0,
         fat = this.nutriments?.fat?.toInt() ?: 0,
