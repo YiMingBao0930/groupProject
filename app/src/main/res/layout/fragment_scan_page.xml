@@ -2,33 +2,60 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScanPageFragment">
+    android:background="@color/project_background">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/layout_result"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:padding="16dp"
+        android:layout_gravity="center">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_gravity="center"
             android:src="@drawable/qrcode_scan" />
 
         <TextView
             android:id="@+id/textResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:textSize="26sp"
-            android:textStyle="bold" />
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="Scan a barcode or enter it manually" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Enter barcode manually"
+            app:boxStrokeColor="@color/project_accent"
+            app:hintTextColor="@color/project_accent">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/barcodeInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/white"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Search"
+            android:backgroundTint="@color/project_accent"/>
+    </LinearLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
@@ -38,16 +65,16 @@
         android:backgroundTint="@color/cadmium_violet"
         app:fabCradleMargin="10dp"
         app:fabCradleRoundedCornerRadius="10dp"
-        app:fabCradleVerticalOffset="10dp" />
+        app:fabCradleVerticalOffset="10dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="KotlinQRCodeSCanner"
+        android:contentDescription="Scan Barcode"
         android:src="@drawable/qrcode_scan"
         app:backgroundTint="@color/cadmium_violet"
         app:layout_anchor="@id/bottomAppBar"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
