@@ -22,6 +22,7 @@ import java.util.Date
 abstract class AppDatabase : RoomDatabase() {
     //dao is used to access the database
     abstract fun foodItemDao(): FoodItemDao
+    abstract fun userNutritionLogDao(): UserNutritionLogDao
 
     /**
     Check INSTANCE -> Not Null -> Return INSTANCE
@@ -66,15 +67,73 @@ abstract class AppDatabase : RoomDatabase() {
                 // Check if the table is empty
                 if (db.foodItemDao().countFoodItems() == 0) {
                     val foods = listOf(
-                        FoodItem(name = "Apple", calories = 95, protein = 0, carbs = 25, fat = 0),
-                        FoodItem(name = "Banana", calories = 105, protein = 1, carbs = 27, fat = 0),
-                        FoodItem(name = "Carrot", calories = 25, protein = 1, carbs = 6, fat = 0)
+                        FoodItem(
+                            name = "Apple",
+                            calories = 95,
+                            protein = 0, // g
+                            carbs = 25, // g
+                            fat = 0, // g
+                            saturatedFat = 0, // g
+                            unsaturatedFat = 0, // g
+                            cholesterol = 0, // mg
+                            sodium = 2, // mg
+                            potassium = 195, // mg
+                            fiber = 4, // g
+                            sugar = 19, // g
+                            vitaminA = 98, // µg
+                            vitaminB = 0, // mg
+                            vitaminC = 8, // mg
+                            vitaminD = 0, // µg
+                            calcium = 11, // mg
+                            iron = 0 // mg
+                        ),
+                        FoodItem(
+                            name = "Banana",
+                            calories = 105,
+                            protein = 1, // g
+                            carbs = 27, // g
+                            fat = 0, // g
+                            saturatedFat = 0, // g
+                            unsaturatedFat = 0, // g
+                            cholesterol = 0, // mg
+                            sodium = 1, // mg
+                            potassium = 422, // mg
+                            fiber = 3, // g
+                            sugar = 14, // g
+                            vitaminA = 64, // µg
+                            vitaminB = 0, // mg
+                            vitaminC = 10, // mg
+                            vitaminD = 0, // µg
+                            calcium = 6, // mg
+                            iron = 0 // mg
+                        ),
+                        FoodItem(
+                            name = "Carrot",
+                            calories = 25,
+                            protein = 1, // g
+                            carbs = 6, // g
+                            fat = 0, // g
+                            saturatedFat = 0, // g
+                            unsaturatedFat = 0, // g
+                            cholesterol = 0, // mg
+                            sodium = 42, // mg
+                            potassium = 195, // mg
+                            fiber = 2, // g
+                            sugar = 3, // g
+                            vitaminA = 835, // µg
+                            vitaminB = 0, // mg
+                            vitaminC = 6, // mg
+                            vitaminD = 0, // µg
+                            calcium = 20, // mg
+                            iron = 0 // mg
+                        )
                     )
                     // Insert all food items at once
                     db.foodItemDao().insertAll(foods)
                 }
             }
         }
+
 
     }
 }
