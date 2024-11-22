@@ -68,6 +68,12 @@ class RegisterFragment : Fragment() {
                     .putString(username, hashedPassword)
                     .apply()
 
+                // set logged in username
+                with(sharedPreferences.edit()) {
+                    putString("logged_in_username", username)
+                    apply()
+                }
+
                 Snackbar.make(view, "Registration successful!", Snackbar.LENGTH_SHORT).show()
 
                 // Navigate to GoalSettingFragment

@@ -23,7 +23,7 @@
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="0dp"
-        android:layout_height="97dp"
+        android:layout_height="150dp"
         android:layout_marginStart="21dp"
         android:layout_marginTop="96dp"
         android:layout_marginEnd="21dp"
@@ -43,15 +43,37 @@
             android:textSize="25dp" />
 
         <SearchView
+            android:id="@+id/food_search_view"
             android:layout_width="343dp"
             android:layout_height="wrap_content"
             android:background="@drawable/gray_rounded_corners" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/food_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout8"
+            app:layout_constraintBottom_toTopOf="@id/linearLayout13" />
+
+        <TextView
+            android:id="@+id/no_results_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="No results found"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout8"
+            app:layout_constraintBottom_toTopOf="@id/linearLayout13" />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout10"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="332dp"
@@ -65,7 +87,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Recommedntation"
+            android:text="Recommendation"
             android:textSize="35sp" />
 
     </LinearLayout>

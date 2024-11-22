@@ -14,7 +14,7 @@ interface FoodItemDao {
     @Delete
     suspend fun delete(foodItem: FoodItem)
 
-    @Query("SELECT * FROM food_items WHERE name LIKE :searchQuery")
+    @Query("SELECT * FROM food_items WHERE name LIKE :searchQuery ORDER BY name ASC")
     fun searchFoodItems(searchQuery: String): LiveData<List<FoodItem>>
 
     @Insert
