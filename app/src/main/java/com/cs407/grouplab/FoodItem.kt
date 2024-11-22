@@ -12,7 +12,9 @@ data class FoodItem(
     val carbs: Int, // g
     val fat: Int, // g
     val saturatedFat: Int, // g
-    val unsaturatedFat: Int, // g
+    val transFat: Int, // g
+    val polyUnsaturatedFat: Int, // g
+    val monoUnsaturatedFat: Int, // g
     val cholesterol: Int, // mg
     val sodium: Int, // mg
     val potassium: Int, // mg

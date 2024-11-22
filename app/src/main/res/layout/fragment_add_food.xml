@@ -1,0 +1,609 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/project_background"
+    android:orientation="vertical"
+    android:gravity="center">
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="24dp" />
+
+    <TextView
+        android:id="@+id/addFoodTitle"
+        android:layout_width="382dp"
+        android:layout_height="50dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center_horizontal"
+        android:text="@string/food_nutrition"
+        android:textColor="@color/white"
+        android:textSize="36sp" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="650dp"
+        android:background="@color/project_background"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/foodNameInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/food_name_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/food_name_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/calorieInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/calories_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/kcal_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/calories_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proteinInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/protein_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/protein_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/carbsInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/carbs_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/carbs_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fatInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/fat_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fat_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/satFatInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/sat_fat_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sat_fat_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/transFatInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/trans_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/trans_fat_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/polyFatInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/poly_fat_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/poly_fat_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/monoFatInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/mono_fat_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mono_fat_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cholesterolInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/cholesterol_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cholesterol_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sodiumInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/sodium_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sodium_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/potassiumInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/potassium_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/potassium_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fiberInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/fiber_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fiber_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sugarInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/sugar_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/g_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sugar_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vitaminAInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/vitamina_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vitamina_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vitaminBInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/vitaminb_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vitaminb_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vitaminCInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/vitaminc_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vitaminc_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vitaminDInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/vitamind_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vitamind_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/calciumInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/calcium_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/calcium_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ironInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:hint="@string/iron_hint"
+                android:textColorHint="@color/project_hint"
+                app:boxBackgroundColor="@color/project_sub"
+                app:boxStrokeColor="@color/project_hint"
+                app:cursorColor="@color/project_accent"
+                app:endIconDrawable="@drawable/baseline_arrow_back_24"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/project_hint"
+                app:hintTextColor="@color/hint_color_state"
+                app:suffixText="@string/mg_unit"
+                app:suffixTextColor="@color/project_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/iron_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    app:hintTextColor="@color/hint_color_state" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/save_food_button"
+        android:layout_width="280dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#B7EDB3"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center"
+        android:text="@string/add_food"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+</LinearLayout>

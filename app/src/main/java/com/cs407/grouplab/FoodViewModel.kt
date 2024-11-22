@@ -31,7 +31,9 @@ class FoodRepository {
                 carbs = 25, // g
                 fat = 0, // g
                 saturatedFat = 0, // g
-                unsaturatedFat = 0, // g
+                transFat = 0, // g
+                polyUnsaturatedFat = 0, // g
+                monoUnsaturatedFat = 0, // g
                 cholesterol = 0, // mg
                 sodium = 2, // mg
                 potassium = 195, // mg
@@ -51,7 +53,9 @@ class FoodRepository {
                 carbs = 27, // g
                 fat = 0, // g
                 saturatedFat = 0, // g
-                unsaturatedFat = 0, // g
+                transFat = 0, // g
+                polyUnsaturatedFat = 0, // g
+                monoUnsaturatedFat = 0, // g
                 cholesterol = 0, // mg
                 sodium = 1, // mg
                 potassium = 422, // mg
@@ -71,7 +75,9 @@ class FoodRepository {
                 carbs = 6, // g
                 fat = 0, // g
                 saturatedFat = 0, // g
-                unsaturatedFat = 0, // g
+                transFat = 0, // g
+                polyUnsaturatedFat = 0, // g
+                monoUnsaturatedFat = 0, // g
                 cholesterol = 0, // mg
                 sodium = 42, // mg
                 potassium = 195, // mg
