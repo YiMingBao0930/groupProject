@@ -1,4 +1,4 @@
-package com.cs407.grouplab
+package com.cs407.grouplab.data
 
 import android.content.Context
 import androidx.room.Database
@@ -6,9 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import com.cs407.grouplab.FoodItem
+import com.cs407.grouplab.FoodItemDao
+import com.cs407.grouplab.R
+import com.cs407.grouplab.UserNutritionLog
+import com.cs407.grouplab.UserNutritionLogDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -17,22 +21,12 @@ import java.util.Date
 
 
 //this is the database class which is used to create the database
-@Database(entities = [FoodItem::class], version = 1)
+@Database(entities = [FoodItem::class, UserNutritionLog::class], version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     //dao is used to access the database
     abstract fun foodItemDao(): FoodItemDao
     abstract fun userNutritionLogDao(): UserNutritionLogDao
-
-    /**
-    Check INSTANCE -> Not Null -> Return INSTANCE
-    |
-    V
-    Null -> Enter Synchronized Block -> Check INSTANCE Again -> Still Null -> Initialize INSTANCE -> Exit Block -> Return INSTANCE
-    |
-    V
-    Not Null -> Return INSTANCE
-     **/
 
     //static method declaration
     companion object {
@@ -46,7 +40,8 @@ abstract class AppDatabase : RoomDatabase() {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    AppDatabase::class.java,"food_database"
+                    AppDatabase::class.java,
+                    context.getString(R.string.app_database)
                 )
                     //if migration fails, create new db
                     .fallbackToDestructiveMigration()
@@ -62,7 +57,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         fun populateInitialData(context: Context) {
-            val db = AppDatabase.getDatabase(context)
+            val db = getDatabase(context)
             CoroutineScope(Dispatchers.IO).launch {
                 // Check if the table is empty
                 if (db.foodItemDao().countFoodItems() == 0) {

@@ -6,7 +6,9 @@ data class DailyNutritionSummary(
     val totalCarbs: Int,
     val totalFat: Int,
     val totalSaturatedFat: Int,
-    val totalUnsaturatedFat: Int,
+    val totalTransFat: Int,
+    val totalPolySaturatedFat: Int,
+    val totalMonoSaturatedFat: Int,
     val totalCholesterol: Int,
     val totalSodium: Int,
     val totalPotassium: Int,
@@ -19,3 +21,4 @@ data class DailyNutritionSummary(
     val totalCalcium: Int,
     val totalIron: Int
 )
+

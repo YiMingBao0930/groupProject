@@ -1,13 +1,18 @@
 package com.cs407.grouplab
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.cs407.grouplab.data.AppDatabase
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AddFoodFragment : Fragment() {
 
@@ -106,7 +111,7 @@ class AddFoodFragment : Fragment() {
 
     private fun saveFood() {
         // Extract values from inputs
-        val foodName = foodNameInput.text.toString()
+        val foodName = foodNameInput.text.toString().trim()
         val calories = caloriesInput.text.toString().toIntOrNull() ?: 0
         val protein = proteinInput.text.toString().toIntOrNull() ?: 0
         val carbs = carbsInput.text.toString().toIntOrNull() ?: 0
@@ -127,9 +132,53 @@ class AddFoodFragment : Fragment() {
         val calcium = calciumInput.text.toString().toIntOrNull() ?: 0
         val iron = ironInput.text.toString().toIntOrNull() ?: 0
 
-        // Simulate saving the food to a database
-        Snackbar.make(requireView(), "Food saved successfully!", Snackbar.LENGTH_SHORT).show()
+        // Validate food name
+        if (foodName.isEmpty()) {
+            Snackbar.make(requireView(), "Food name cannot be empty", Snackbar.LENGTH_SHORT).show()
+            return
+        }
 
-        // Log or use the values as needed
+        // Create a FoodItem object
+        val foodItem = FoodItem(
+            name = foodName,
+            calories = calories,
+            protein = protein,
+            carbs = carbs,
+            fat = fat,
+            saturatedFat = satFat,
+            transFat = transFat,
+            polyUnsaturatedFat = polyFat,
+            monoUnsaturatedFat = monoFat,
+            cholesterol = cholesterol,
+            sodium = sodium,
+            potassium = potassium,
+            fiber = fiber,
+            sugar = sugar,
+            vitaminA = vitaminA,
+            vitaminB = vitaminB,
+            vitaminC = vitaminC,
+            vitaminD = vitaminD,
+            calcium = calcium,
+            iron = iron
+        )
+
+        // Save the food item to the database
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val db = AppDatabase.getDatabase(requireContext())
+                db.foodItemDao().insert(foodItem)
+                CoroutineScope(Dispatchers.Main).launch {
+                    Snackbar.make(requireView(), "Food saved successfully!", Snackbar.LENGTH_SHORT).show()
+                    // Navigate back or clear fields
+                    parentFragmentManager.popBackStack()
+                }
+            } catch (e: Exception) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    Snackbar.make(requireView(), "Error saving food: ${e.message}", Snackbar.LENGTH_SHORT).show()
+                    Log.e("Error", "Error saving food: ${e.message}")
+                }
+            }
+        }
     }
+
 }

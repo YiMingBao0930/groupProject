@@ -58,4 +58,5 @@
     <string name="kcal_unit">kCal</string>
     <string name="food_nutrition">Food Nutrition Data</string>
     <string name="add_food">Add Food</string>
+    <string name="app_database">appDatabase</string>
 </resources>
