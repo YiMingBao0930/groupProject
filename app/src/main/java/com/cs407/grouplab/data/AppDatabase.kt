@@ -11,6 +11,8 @@ import com.cs407.grouplab.FoodItemDao
 import com.cs407.grouplab.R
 import com.cs407.grouplab.UserNutritionLog
 import com.cs407.grouplab.UserNutritionLogDao
+import com.cs407.grouplab.UserGoal
+import com.cs407.grouplab.UserGoalDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,12 +23,21 @@ import java.util.Date
 
 
 //this is the database class which is used to create the database
-@Database(entities = [FoodItem::class, UserNutritionLog::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+    FoodItem::class,
+    UserNutritionLog::class,
+    UserGoal::class
+               ],
+    version = 2,
+    exportSchema = false
+)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     //dao is used to access the database
     abstract fun foodItemDao(): FoodItemDao
     abstract fun userNutritionLogDao(): UserNutritionLogDao
+    abstract fun userGoalDao(): UserGoalDao
 
     //static method declaration
     companion object {
