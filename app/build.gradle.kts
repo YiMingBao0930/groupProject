@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -40,6 +41,18 @@ android {
     }
 }
 dependencies {
+
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    // To use Kotlin Symbol Processing (KSP)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     implementation("androidx.compose.ui:ui:1.5.3")
     implementation("androidx.compose.material:material:1.5.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.3")
@@ -54,10 +67,15 @@ dependencies {
 
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     testImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.0")
 
-
+    implementation("com.google.android.material:material:1.13.0-alpha08")
+    implementation("com.makeramen:roundedimageview:2.3.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.4")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.4")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

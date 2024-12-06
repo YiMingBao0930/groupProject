@@ -2,12 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="project_background">#000000</color>
+    <color name="project_background">#0f0f0f</color>
     <color name="project_accent">#B7EDB3</color>
     <color name="cadmium_violet">#8541A9</color>
     <color name="project_hint">#909090</color>
     <color name="project_sub">#202020</color>
-    <color name="protein_color">#C0FFBE59</color>
-    <color name="carb_color">#C0FF6F3B</color>
-    <color name="fat_color">#C059E8FE</color>
+    <color name="protein_color">#f0ffc124</color>
+    <color name="carb_color">#e0FF6F3B</color>
+    <color name="fat_color">#e059E8FE</color>
+    <color name="gray">#e0e0e0</color>
+    
+    <color name="colorPrimary">#673AB7</color>
+    <color name="colorPrimaryDark">#512DA8</color>
+    <color name="colorAccent">#FF5252</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="green">#32CD32</color>
+    <color name="baby_bule">#99b8c7</color>
+
 </resources>

@@ -1,0 +1,94 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@color/project_sub">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@color/project_sub">
+
+        <TextView
+            android:id="@+id/food_name_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Food Name"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_semibold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/servingInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="79dp"
+            android:hint="Enter serving count"
+            android:textColorHint="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/food_name_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            app:boxBackgroundColor="@color/project_hint"
+            app:boxStrokeColor="@color/project_hint"
+            app:endIconDrawable="@drawable/baseline_arrow_back_24"
+            app:cursorColor="@color/project_accent"
+            app:errorEnabled="true"
+            app:helperTextTextColor="@color/project_hint"
+            app:hintTextColor="@color/hint_color_state"
+            app:suffixTextColor="@color/project_accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/serving_input"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/montserrat_semibold"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/white"
+                app:hintTextColor="@color/hint_color_state" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/servingInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/project_accent"
+            app:cornerRadius="24dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center"
+            android:text="Add"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/servingInputLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            android:backgroundTint="@color/project_accent"
+            app:cornerRadius="24dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

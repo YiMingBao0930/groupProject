@@ -6,6 +6,7 @@
         android:name="android.hardware.camera"
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +31,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".AppHomePage" />
-        <activity android:name=".NutritionPage" />
+        <activity android:name=".Food" />
+        <activity android:name=".Stats" />
+        <activity android:name=".DailySummary"/>
+        <activity android:name=".ExerciseMenu"/>
 
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

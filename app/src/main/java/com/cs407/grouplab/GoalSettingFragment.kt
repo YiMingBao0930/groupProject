@@ -1,6 +1,7 @@
 package com.cs407.grouplab
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -16,16 +17,22 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.cs407.grouplab.data.AppDatabase
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import com.cs407.grouplab.UserGoalDao
 
 
 class GoalSettingFragment : Fragment() {
@@ -100,7 +107,8 @@ class GoalSettingFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Update recommendedCalories and recalculate values
                 val caloriesText = s.toString()
-                recommendedCalories = caloriesText.toIntOrNull() ?: 2000 // Default to 2000 if input is invalid
+                recommendedCalories =
+                    caloriesText.toIntOrNull() ?: 2000 // Default to 2000 if input is invalid
                 updateTextViews() // Recalculate values
             }
 
@@ -135,7 +143,12 @@ class GoalSettingFragment : Fragment() {
         curWeightTextEdit.addTextChangedListener(weightTextWatcher)
         goalWeightTextEdit.addTextChangedListener(weightTextWatcher)
         activityLevelSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 calculateRecommendedCalories()
             }
 
@@ -143,15 +156,31 @@ class GoalSettingFragment : Fragment() {
         }
 
         // Set up the Confirm Goal button click listener
+//        confirmGoalButton.setOnClickListener {
+//            if (validateInputs()) {
+//                // All inputs are valid, go to home page
+//                val fragment = AppHomePageFragment()
+//                parentFragmentManager.beginTransaction()
+//                    .setCustomAnimations(
+//                        R.anim.slide_in_right,
+//                        R.anim.slide_out_left,
+//                        R.anim.slide_in_right,
+//                        R.anim.slide_out_left
+//                    )
+//                    .replace(R.id.fragment_container, fragment)
+//                    .addToBackStack(null)
+//                    .commit()
+//
+//            } else {
+//                Snackbar.make(view, "One or more fields aren't filled out", Snackbar.LENGTH_SHORT)
+//                    .show()
+//            }
+//        }
         confirmGoalButton.setOnClickListener {
             if (validateInputs()) {
-                // All inputs are valid, go to home page
-                val intent = Intent(requireContext(), AppHomePage::class.java)
-                startActivity(intent)
-
-            }
-            else {
-                Snackbar.make(view, "One or more fields aren't filled out", Snackbar.LENGTH_SHORT).show()
+                saveGoals()
+            } else {
+                Snackbar.make(view, "Please fill all fields", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -200,6 +229,7 @@ class GoalSettingFragment : Fragment() {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             calculateRecommendedCalories()
         }
+
         override fun afterTextChanged(s: android.text.Editable?) {}
     }
 
@@ -222,12 +252,15 @@ class GoalSettingFragment : Fragment() {
                     val today = Calendar.getInstance().time
 
                     // Calculate days until goal date
-                    val daysUntilGoal = ((goalDate!!.time - today.time) / (1000 * 60 * 60 * 24)).toInt()
+                    val daysUntilGoal =
+                        ((goalDate!!.time - today.time) / (1000 * 60 * 60 * 24)).toInt()
 
                     // Calculate daily calorie adjustment
                     val weightDifference = goalWeight - currentWeight
-                    val totalCalorieChange = (weightDifference * 3500).toInt() // 3500 calories per pound
-                    val dailyCalorieChange = (totalCalorieChange / daysUntilGoal).coerceIn(-1000, 1000)
+                    val totalCalorieChange =
+                        (weightDifference * 3500).toInt() // 3500 calories per pound
+                    val dailyCalorieChange =
+                        (totalCalorieChange / daysUntilGoal).coerceIn(-1000, 1000)
 
                     // Adjust base calories based on activity level
                     val activityFactor = when (activityLevelSpinner.selectedItemPosition) {
@@ -238,7 +271,8 @@ class GoalSettingFragment : Fragment() {
                         else -> 1.2f
                     }
 
-                    recommendedCalories = ((baseCalories + dailyCalorieChange) * activityFactor).roundToInt()
+                    recommendedCalories =
+                        ((baseCalories + dailyCalorieChange) * activityFactor).roundToInt()
                     recommendedCaloriesTextEdit.setText("$recommendedCalories")
 
                     // Update macronutrient ratios
@@ -251,7 +285,6 @@ class GoalSettingFragment : Fragment() {
             }
         }
     }
-
 
 
     private fun adjustRatios(value: Int, sliderType: String) {
@@ -282,6 +315,7 @@ class GoalSettingFragment : Fragment() {
                         carbs += difference
                     }
                 }
+
                 "fat" -> {
                     if (carbs + difference >= 0) {
                         carbs += difference
@@ -289,6 +323,7 @@ class GoalSettingFragment : Fragment() {
                         protein += difference
                     }
                 }
+
                 "carbs" -> {
                     if (protein + difference >= 0) {
                         protein += difference
@@ -372,5 +407,61 @@ class GoalSettingFragment : Fragment() {
             goalDateButton.text = formattedDate
         }
     }
+
+    private fun saveGoals() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("logged_in_username", null) ?: return
+
+        // Get values from inputs
+        val currentWeight = curWeightTextEdit.text.toString().toFloatOrNull() ?: return
+        val goalWeight = goalWeightTextEdit.text.toString().toFloatOrNull() ?: return
+        val targetDate = try {
+            SimpleDateFormat(
+                "MM/dd/yyyy",
+                Locale.getDefault()
+            ).parse(goalDateButton.text.toString())
+        } catch (e: Exception) {
+            null
+        } ?: return
+
+        val activityLevel = activityLevelSpinner.selectedItemPosition
+        val calories = recommendedCaloriesTextEdit.text.toString().toIntOrNull() ?: return
+        val protein = proteinSlider.value.toInt()
+        val fat = fatSlider.value.toInt()
+        val carbs = carbsSlider.value.toInt()
+
+        val goal = UserGoal(
+            username = username,
+            currentWeight = currentWeight,
+            goalWeight = goalWeight,
+            targetDate = targetDate,
+            activityLevel = activityLevel,
+            dailyCalories = calories,
+            proteinPercentage = protein,
+            fatPercentage = fat,
+            carbsPercentage = carbs
+        )
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                AppDatabase.getDatabase(requireContext()).userGoalDao().insert(goal)
+                withContext(Dispatchers.Main) {
+                    // Navigate to home page on success
+                    val fragment = AppHomePageFragment()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Snackbar.make(requireView(), "Error saving goals", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
 
 }
