@@ -6,8 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.cs407.grouplab.CaloriesRecord
 import com.cs407.grouplab.CaloriesRecordDao
+import com.cs407.grouplab.Exercise
+import com.cs407.grouplab.ExerciseDao
+import com.cs407.grouplab.ExerciseLog
+import com.cs407.grouplab.ExerciseLogDao
 import com.cs407.grouplab.FoodItem
 import com.cs407.grouplab.FoodItemDao
 import com.cs407.grouplab.R
@@ -17,9 +22,7 @@ import com.cs407.grouplab.UserNutritionLog
 import com.cs407.grouplab.UserNutritionLogDao
 import com.cs407.grouplab.UserGoal
 import com.cs407.grouplab.UserGoalDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Date
 
 //entities- table FoodItem added here
@@ -33,7 +36,9 @@ import java.util.Date
         UserNutritionLog::class,
         UserGoal::class,
         StepRecord::class,
-        CaloriesRecord::class
+        CaloriesRecord::class,
+        Exercise::class,
+        ExerciseLog:: class
     ],
     version = 3, // Increment the version number
     exportSchema = false
@@ -46,6 +51,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userGoalDao(): UserGoalDao
     abstract fun stepRecordDao(): StepRecordDao
     abstract fun caloriesRecordDao(): CaloriesRecordDao
+    abstract fun exerciseDao(): ExerciseDao
+    abstract fun exerciseLogDao(): ExerciseLogDao
 
     //static method declaration
     companion object {
@@ -74,88 +81,8 @@ abstract class AppDatabase : RoomDatabase() {
             }
 
         }
-
-        fun populateInitialData(context: Context) {
-            val db = getDatabase(context)
-            CoroutineScope(Dispatchers.IO).launch {
-                // Check if the table is empty
-                if (db.foodItemDao().countFoodItems() == 0) {
-                    val foods = listOf(
-                        FoodItem(
-                            name = "Apple",
-                            calories = 95,
-                            protein = 0, // g
-                            carbs = 25, // g
-                            fat = 0, // g
-                            saturatedFat = 0, // g
-                            transFat = 0, // g
-                            polyUnsaturatedFat = 0, // g
-                            monoUnsaturatedFat = 0, // g
-                            cholesterol = 0, // mg
-                            sodium = 2, // mg
-                            potassium = 195, // mg
-                            fiber = 4, // g
-                            sugar = 19, // g
-                            vitaminA = 98, // µg
-                            vitaminB = 0, // mg
-                            vitaminC = 8, // mg
-                            vitaminD = 0, // µg
-                            calcium = 11, // mg
-                            iron = 0 // mg
-                        ),
-                        FoodItem(
-                            name = "Banana",
-                            calories = 105,
-                            protein = 1, // g
-                            carbs = 27, // g
-                            fat = 0, // g
-                            saturatedFat = 0, // g
-                            transFat = 0, // g
-                            polyUnsaturatedFat = 0, // g
-                            monoUnsaturatedFat = 0, // g
-                            cholesterol = 0, // mg
-                            sodium = 1, // mg
-                            potassium = 422, // mg
-                            fiber = 3, // g
-                            sugar = 14, // g
-                            vitaminA = 64, // µg
-                            vitaminB = 0, // mg
-                            vitaminC = 10, // mg
-                            vitaminD = 0, // µg
-                            calcium = 6, // mg
-                            iron = 0 // mg
-                        ),
-                        FoodItem(
-                            name = "Carrot",
-                            calories = 25,
-                            protein = 1, // g
-                            carbs = 6, // g
-                            fat = 0, // g
-                            saturatedFat = 0, // g
-                            transFat = 0, //g
-                            polyUnsaturatedFat = 0, // g
-                            monoUnsaturatedFat = 0, // g
-                            cholesterol = 0, // mg
-                            sodium = 42, // mg
-                            potassium = 195, // mg
-                            fiber = 2, // g
-                            sugar = 3, // g
-                            vitaminA = 835, // µg
-                            vitaminB = 0, // mg
-                            vitaminC = 6, // mg
-                            vitaminD = 0, // µg
-                            calcium = 20, // mg
-                            iron = 0 // mg
-                        )
-                    )
-                    // Insert all food items at once
-                    db.foodItemDao().insertAll(foods)
-                }
-            }
-        }
-
-
     }
+
 }
 
 class DateConverter {

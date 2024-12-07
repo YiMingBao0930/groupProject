@@ -1,5 +1,6 @@
 package com.cs407.grouplab
 
+import ExerciseAdapter
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -21,6 +22,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cs407.grouplab.data.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +45,8 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
     private var today: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     private var global_steps = 0f
     private lateinit var caloriesRecordDao: CaloriesRecordDao
+    private lateinit var exerciseRecyclerView: RecyclerView
+    private lateinit var exerciseAdapter: ExerciseAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +84,7 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
         val view = inflater.inflate(R.layout.exercise_menu, container, false)
 
         caloriesBurnedTextView = view.findViewById(R.id.step_calorie_burned)
+        populateExercisesIfNeeded()
 
         return view
     }
@@ -91,6 +97,23 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
 
         // Reset `initialStepCount` when a new user logs in
         resetStepTrackingForNewUser()
+
+
+        exerciseRecyclerView = view.findViewById(R.id.exercise_recycler_view)
+        exerciseAdapter = ExerciseAdapter { exercise ->
+            // Handle exercise item click, e.g., show a dialog for time spent
+            val dialog = LogExerciseDialogFragment(exercise)
+            dialog.show(parentFragmentManager, "ExerciseLogDialog")
+        }
+
+        exerciseRecyclerView.adapter = exerciseAdapter
+        exerciseRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        lifecycleScope.launch {
+            val db = AppDatabase.getDatabase(requireContext())
+            val exercises = db.exerciseDao().getAllExercises()
+            exerciseAdapter.submitList(exercises)
+        }
 
 
         // Initialize SensorManager and Step Counter Sensor
@@ -131,6 +154,7 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
             db.userGoalDao().getUserGoal(loggedInUser)
         }
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -174,9 +198,9 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
 
     // uses formula based on weight and avg step time to get calories per step
     private fun calculateCaloriesPerStep(weightKg: Double): Double {
-        val met = 4.2
-        val stepTimeInHours = 0.5 / 3600.0
-        return met * weightKg * stepTimeInHours
+        val met = 3.8
+        val stepTimeInHours = 0.5 / 60.0 // minutes actually
+        return 3.5 * met * weightKg * stepTimeInHours / 200
     }
 
     private suspend fun saveSteps(stepsSinceLast: Int, currentSensorValue: Float) {
@@ -339,6 +363,48 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
         }
     }
 
+    private fun populateExercisesIfNeeded() {
+        val exerciseList = listOf(
+            // High-Intensity Exercises
+            Exercise(name = "Running", metValue = 9.8, description = "High-intensity cardio exercise."),
+            Exercise(name = "Cycling (16-19 mph)", metValue = 12.0, description = "High-speed outdoor or indoor cycling."),
+            Exercise(name = "Jump Rope", metValue = 11.0, description = "Cardio using a jump rope."),
+            Exercise(name = "Swimming (freestyle)", metValue = 7.0, description = "Continuous freestyle swimming."),
+            Exercise(name = "Rowing (vigorous)", metValue = 7.5, description = "Rowing machine workout at high effort."),
+            Exercise(name = "Stair Climbing", metValue = 8.8, description = "Vigorous stair climbing."),
+
+            // Moderate-Intensity Exercises
+            Exercise(name = "Walking (4 mph)", metValue = 5.0, description = "Brisk walking pace."),
+            Exercise(name = "Dancing", metValue = 6.0, description = "High-energy dance routines."),
+            Exercise(name = "Cycling (10-12 mph)", metValue = 6.8, description = "Moderate-speed outdoor or indoor cycling."),
+            Exercise(name = "Hiking", metValue = 6.0, description = "Walking on uneven terrain."),
+            Exercise(name = "Aerobics", metValue = 6.0, description = "Group or solo aerobic exercises."),
+            Exercise(name = "Elliptical Trainer", metValue = 5.0, description = "Moderate-intensity elliptical workout."),
+
+            // Sports and Recreational Activities
+            Exercise(name = "Basketball (game)", metValue = 8.0, description = "Full-court basketball."),
+            Exercise(name = "Soccer (game)", metValue = 10.0, description = "Competitive soccer game."),
+            Exercise(name = "Tennis (singles)", metValue = 7.0, description = "Singles tennis match."),
+            Exercise(name = "Volleyball (competitive)", metValue = 6.0, description = "Competitive volleyball match."),
+            Exercise(name = "Badminton", metValue = 4.5, description = "Recreational badminton game."),
+            Exercise(name = "Table Tennis", metValue = 4.0, description = "Recreational table tennis match."),
+            Exercise(name = "Golf (carrying clubs)", metValue = 4.3, description = "Walking and carrying clubs."),
+            Exercise(name = "Baseball", metValue = 5.0, description = "Playing baseball or softball.")
+        )
+
+        val exerciseNames = exerciseList.map { it.name }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = AppDatabase.getDatabase(requireContext())
+            val existingNames = db.exerciseDao().getExistingExerciseNames(exerciseNames)
+
+            val newExercises = exerciseList.filterNot { it.name in existingNames }
+
+            if (newExercises.isNotEmpty()) {
+                db.exerciseDao().insertExercises(newExercises)
+            }
+        }
+    }
 
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {

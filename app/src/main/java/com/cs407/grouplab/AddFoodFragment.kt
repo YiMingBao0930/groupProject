@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.cs407.grouplab.data.AppDatabase
 import com.google.android.material.textfield.TextInputEditText
@@ -68,6 +70,22 @@ class AddFoodFragment : Fragment() {
         ironInput = view.findViewById(R.id.iron_input)
 
         saveFoodButton = view.findViewById(R.id.save_food_button)
+
+        // Set up the Toolbar
+        val toolbar: Toolbar = view.findViewById(R.id.add_food_toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // Enable the back button in the toolbar
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = "" // Hide the toolbar title text
+        }
+
+        // Handle back button click
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack() // Navigate back to the previous fragment
+        }
 
         // Set up save button listener
         saveFoodButton.setOnClickListener {

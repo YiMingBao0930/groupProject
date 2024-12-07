@@ -7,6 +7,14 @@
     android:orientation="vertical"
     android:gravity="center">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/add_food_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/project_background"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
 
     <Space
         android:layout_width="match_parent"
@@ -24,7 +32,8 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="650dp"
+        android:layout_height="550dp"
+        android:layout_gravity="top"
         android:background="@color/project_background"
         android:padding="16dp">
 
@@ -601,7 +610,7 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="#B7EDB3"
         android:fontFamily="@font/montserrat_semibold"
-        android:gravity="center"
+
         android:text="@string/add_food"
         android:textAlignment="center"
         android:textColor="@color/black"
