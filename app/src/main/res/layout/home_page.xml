@@ -168,24 +168,13 @@
             app:layout_constraintTop_toBottomOf="@id/settingButton">
 
             <TextView
+                android:id="@+id/recommendedCaloriesTextEdit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Recommedntation"
                 android:textSize="35sp" />
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="208dp"
-            android:layout_marginBottom="310dp"
-            android:text="test"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/linearLayout7"
-            app:layout_constraintTop_toBottomOf="@+id/chart"
-            app:layout_constraintVertical_bias="1.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
