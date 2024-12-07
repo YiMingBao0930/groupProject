@@ -13,7 +13,7 @@ data class UserGoal(
     @PrimaryKey val username: String,
     val currentWeight: Float,
     val goalWeight: Float,
-    val targetDate: Date,
+    val targetDate: String,
     val activityLevel: Int,
     val dailyCalories: Int,
     val proteinPercentage: Int,
