@@ -7,12 +7,10 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:background="@color/project_background"
         android:paddingTop="30dp"
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -22,7 +20,7 @@
         android:id="@+id/curWeightTextLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
-        android:layout_height="79dp"
+        android:layout_height="70dp"
         android:hint="@string/current_weight"
         android:textColorHint="@color/project_hint"
         app:boxBackgroundColor="@color/project_sub"
@@ -50,7 +48,7 @@
         android:id="@+id/goalWeightTextLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
-        android:layout_height="73dp"
+        android:layout_height="68dp"
         android:hint="@string/goal_weight"
         android:textColorHint="@color/project_hint"
         app:boxBackgroundColor="@color/project_sub"
@@ -76,7 +74,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/goalDate_button"
         android:layout_width="320dp"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_gravity="center_horizontal"
         android:backgroundTint="@color/project_accent"
         app:cornerRadius="24dp"
@@ -137,7 +135,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="15dp" />
+        android:layout_height="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -245,6 +243,7 @@
         android:valueFrom="0"
         android:valueTo="100"
         android:stepSize="1"
+        android:value="25"
         app:trackColorActive="@color/protein_color"
         app:thumbColor="@color/white"
         app:tickColor="@color/project_background"
@@ -258,6 +257,7 @@
         android:valueFrom="0"
         android:valueTo="100"
         android:stepSize="1"
+        android:value="35"
         app:trackColorActive="@color/fat_color"
         app:thumbColor="@color/white"
         app:tickColor="@color/project_background"
@@ -271,20 +271,43 @@
         android:valueFrom="0"
         android:valueTo="100"
         android:stepSize="1"
+        android:value="40"
         app:tickColor="@color/project_background"
         app:trackColorActive="@color/carb_color"
         app:trackColorInactive="@color/carb_color"
         app:thumbColor="@color/white"
         app:thumbTint="@color/carb_color" />
 
-    <Space
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/goalStepsTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_height="68dp"
+        android:hint="@string/goal_steps_hint"
+        android:textColorHint="@color/project_hint"
+        app:boxBackgroundColor="@color/project_sub"
+        app:boxStrokeColor="@color/project_hint"
+        app:errorEnabled="true"
+        app:cursorColor="@color/project_accent"
+        app:helperTextTextColor="@color/project_hint"
+        app:hintTextColor="@color/hint_color_state"
+        app:suffixTextColor="@color/project_accent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/goalStepsTextEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:inputType="number"
+            android:textColor="@color/white"
+            app:hintTextColor="@color/hint_color_state" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirm_goal"
         android:layout_width="320dp"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_gravity="center_horizontal"
         android:backgroundTint="@color/project_accent"
         app:cornerRadius="24dp"

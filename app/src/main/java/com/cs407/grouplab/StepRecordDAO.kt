@@ -18,5 +18,8 @@ interface StepRecordDao {
     @Query("SELECT MAX(lastTotalSteps) FROM step_records")
     suspend fun getMaxLastTotalSteps(): Float?
 
+    @Query("SELECT * FROM step_records WHERE lastTotalSteps = (SELECT MAX(lastTotalSteps) FROM step_records)")
+    suspend fun getStepRecordWithMaxLastTotalSteps(): StepRecord?
+
 }
 

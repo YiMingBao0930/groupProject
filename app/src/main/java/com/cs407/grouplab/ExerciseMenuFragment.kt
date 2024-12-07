@@ -15,12 +15,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.cs407.grouplab.data.AppDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -34,8 +38,9 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var loggedInUser: String
     private lateinit var stepRecordDao: StepRecordDao
+    private lateinit var caloriesBurnedTextView: TextView
     private var today: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-
+    private var global_steps = 0f
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,16 +65,17 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
         // Initialize SharedPreferences
         sharedPrefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         loggedInUser = sharedPrefs.getString("logged_in_username", null).toString()
-
-        // Reset `initialStepCount` when a new user logs in
-        resetStepTrackingForNewUser()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.exercise_menu, container, false)
+        val view = inflater.inflate(R.layout.exercise_menu, container, false)
+
+        caloriesBurnedTextView = view.findViewById(R.id.step_calorie_burned)
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,12 +84,46 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
         // Initialize the stepsTextView
         stepsTextView = view.findViewById(R.id.steps_text_view)
 
+        // Reset `initialStepCount` when a new user logs in
+        resetStepTrackingForNewUser()
+
+
         // Initialize SensorManager and Step Counter Sensor
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         stepCounterSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
         if (stepCounterSensor == null) {
             Toast.makeText(requireContext(), "Step Counter Sensor not available!", Toast.LENGTH_LONG).show()
+        }
+
+        // Set up the Toolbar
+        val toolbar: Toolbar = view.findViewById(R.id.exercise_toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // Enable the back button in the toolbar
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = "" // Hide the toolbar title text
+        }
+
+        // Handle back button click
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack() // Navigate back to the previous fragment
+        }
+        lifecycleScope.launch {
+            val userGoal = fetchUserGoal()
+            val goalSteps = userGoal?.stepsGoal ?: 0
+            val weightKg = userGoal?.currentWeight?.let { it / 2.205 } ?: 70.0 // Convert kg
+            val caloriesPerStep = calculateCaloriesPerStep(weightKg)
+            //updateStepsView(0, goalSteps, caloriesPerStep) // Set initial steps to 0
+        }
+    }
+
+    private suspend fun fetchUserGoal(): UserGoal? {
+        return withContext(Dispatchers.IO) {
+            val db = AppDatabase.getDatabase(requireContext())
+            db.userGoalDao().getUserGoal(loggedInUser)
         }
     }
 
@@ -104,6 +144,7 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_STEP_COUNTER) {
             val steps = event.values[0]
+            global_steps = event.values[0]
             if (initialStepCount == null) {
                 // Set the initial step count value
                 initialStepCount = steps
@@ -114,39 +155,111 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
             lifecycleScope.launch {
                 saveSteps(currentSteps.toInt(), steps)
             }
-            updateStepsView(currentSteps.toInt())
+            lifecycleScope.launch {
+                val userGoal = fetchUserGoal()
+                val goalSteps = userGoal?.stepsGoal ?: 0
+                val weightKg = userGoal?.currentWeight?.let { it / 2.205 } ?: 70.0 // Default to 70kg
+                val caloriesPerStep = calculateCaloriesPerStep(weightKg)
+
+                saveSteps(currentSteps.toInt(), steps)
+                //updateStepsView(currentSteps.toInt(), goalSteps, caloriesPerStep)
+            }
         }
+    }
+
+    private fun calculateCaloriesPerStep(weightKg: Double): Double {
+        val MET = 0.035 // MET value for walking
+        val stepTimeInHours = 0.5 / 3600.0 // Average step time in hours
+        return MET * weightKg * stepTimeInHours
     }
 
     private suspend fun saveSteps(stepsSinceLast: Int, currentSensorValue: Float) {
         Log.d("ExerciseFragment", "Saving steps. Steps Since Last: $stepsSinceLast, Sensor Value: $currentSensorValue")
 
-        // Get the highest `lastTotalSteps` from all records
-        val maxLastTotalSteps = stepRecordDao.getMaxLastTotalSteps() ?: 0f
+        // Get the record with the highest `lastTotalSteps`
+        val highestRecord = stepRecordDao.getStepRecordWithMaxLastTotalSteps()
+        val maxLastTotalSteps = highestRecord?.lastTotalSteps ?: 0f
         Log.d("ExerciseFragment", "Highest lastTotalSteps across all users: $maxLastTotalSteps")
 
+        // Fetch the current user's step record for today
         val stepRecord = stepRecordDao.getStepRecordForDate(loggedInUser, today)
 
-        if (stepRecord != null) {
-            // Calculate steps to add based on the difference from the highest `lastTotalSteps`
-            val newSteps = (currentSensorValue - maxLastTotalSteps).toInt()
-            if (newSteps > 0) {
-                val updatedSteps = stepRecord.steps + newSteps
-                Log.d("ExerciseFragment", "Updated Steps: $updatedSteps")
+        // make sure first created step Record does not have sensor total steps
+        if (highestRecord == null) {
+            // do nothing maybe???
+        }
+        else if (stepRecord != null) {
+            if (stepRecord == highestRecord) {
+                // Update the current user's record normally if it matches the highest record
+                val newSteps = (currentSensorValue - stepRecord.lastTotalSteps).toInt()
+                if (newSteps > 0) {
+                    val updatedSteps = stepRecord.steps + newSteps
+                    Log.d("ExerciseFragment", "Updated Steps: $updatedSteps, Last Total Steps: $currentSensorValue")
 
-                // Update the database with the new steps and sensor value
-                stepRecordDao.updateStepsAndLastTotal(
-                    stepRecord.id,
-                    updatedSteps,
-                    currentSensorValue
-                )
-                updateStepsView(updatedSteps)
+                    // Update the database for the current user
+                    stepRecordDao.updateStepsAndLastTotal(
+                        stepRecord.id,
+                        updatedSteps,
+                        currentSensorValue
+                    )
+                    val userGoal = fetchUserGoal()
+                    val goalSteps = userGoal?.stepsGoal ?: 0
+                    val weightKg = userGoal?.currentWeight?.let { it / 2.205 } ?: 70.0 // Default to 70kg
+                    val caloriesPerStep = calculateCaloriesPerStep(weightKg)
+                    updateStepsView(updatedSteps, goalSteps, caloriesPerStep)
+                } else {
+                    Log.d("ExerciseFragment", "No new steps to save for current user.")
+                }
             } else {
-                Log.d("ExerciseFragment", "No new steps to save.")
+                if (highestRecord != null) {
+                    // Handle case where the user's record is not the highest
+                    Log.d(
+                        "ExerciseFragment",
+                        "Current user's record is not the highest lastTotalSteps."
+                    )
+                    val correctedSteps = (currentSensorValue - maxLastTotalSteps).toInt()
+                    if (correctedSteps > 0) {
+                        val updatedSteps = highestRecord.steps + correctedSteps
+                        Log.d(
+                            "ExerciseFragment",
+                            "Corrected Steps: $updatedSteps, Last Total Steps: $currentSensorValue"
+                        )
+
+                        // Update the highest user's record
+                        stepRecordDao.updateStepsAndLastTotal(
+                            highestRecord.id,
+                            updatedSteps,
+                            highestRecord.lastTotalSteps
+                        )
+                        stepRecordDao.updateStepsAndLastTotal(
+                            stepRecord.id,
+                            stepRecord.steps,
+                            currentSensorValue
+                        )
+                    }
+                }
+            }
+        } else if (highestRecord != null && highestRecord.username != loggedInUser) {
+            // If no record for the current user exists, but another user's record is the highest
+            Log.d("ExerciseFragment", "No record for current user; adjusting steps from highest record.")
+            val correctedSteps = (currentSensorValue - maxLastTotalSteps).toInt()
+            if (correctedSteps > 0) {
+                // Create a new record for the current user
+                /*
+                val newRecord = StepRecord(
+                    username = loggedInUser,
+                    date = today,
+                    initialStepCount = maxLastTotalSteps,
+                    steps = correctedSteps,
+                    lastTotalSteps = currentSensorValue
+                )
+                stepRecordDao.insertStepRecord(newRecord)
+                */
             }
         } else {
-            // Create a new record if none exists
-            Log.d("ExerciseFragment", "No record found for today. Creating new record.")
+            // If no record exists for the current user and no highest record, create a new record
+            Log.d("ExerciseFragment", "No record found for today. Creating new record for current user.")
+            /*
             val newRecord = StepRecord(
                 username = loggedInUser,
                 date = today,
@@ -155,9 +268,12 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
                 lastTotalSteps = currentSensorValue
             )
             stepRecordDao.insertStepRecord(newRecord)
-            updateStepsView(stepsSinceLast)
+
+             */
         }
     }
+
+
 
 
     private fun resetStepTrackingForNewUser() {
@@ -165,28 +281,53 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
             // Fetch today's record for the new user
             val stepRecord = stepRecordDao.getStepRecordForDate(loggedInUser, today)
             if (stepRecord != null) {
-                // Initialize `initialStepCount` to `lastTotalSteps` for the new user
                 initialStepCount = stepRecord.lastTotalSteps
                 Log.d("ExerciseFragment", "Loaded step record for user: $loggedInUser")
-                updateStepsView(stepRecord.steps)
+                val userGoal = fetchUserGoal()
+                val goalSteps = userGoal?.stepsGoal ?: 0
+                val weightKg = userGoal?.currentWeight?.let { it / 2.205 } ?: 70.0 // Default to 70kg
+                val caloriesPerStep = calculateCaloriesPerStep(weightKg)
+                updateStepsView(stepRecord.steps, goalSteps, caloriesPerStep)
             } else {
-                // Reset to 0 if no record exists
                 initialStepCount = null
                 Log.d("ExerciseFragment", "No record found for user: $loggedInUser")
-                updateStepsView(0)
+                val userGoal = fetchUserGoal()
+                val goalSteps = userGoal?.stepsGoal ?: 0
+                val weightKg = userGoal?.currentWeight?.let { it / 2.205 } ?: 70.0 // Default to 70kg
+                val caloriesPerStep = calculateCaloriesPerStep(weightKg)
+                updateStepsView(0, goalSteps, caloriesPerStep)
+                val dummyRecord =  StepRecord(
+                    username = "DUMMY STEP RECORD DO NOT LOG IN AS",
+                    date = today,
+                    initialStepCount = 0f,
+                    steps = 0,
+                    lastTotalSteps = 0f
+                )
+                stepRecordDao.insertStepRecord(dummyRecord)
+                val newRecord = StepRecord(
+                    username = loggedInUser,
+                    date = today,
+                    initialStepCount = global_steps,
+                    steps = 0,
+                    lastTotalSteps = global_steps
+                )
+                stepRecordDao.insertStepRecord(newRecord)
             }
         }
     }
+
 
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // Not needed, but must override
     }
 
-    private fun updateStepsView(steps: Int) {
-        // Safely update the stepsTextView
+    private fun updateStepsView(currentSteps: Int, goalSteps: Int, caloriesPerStep: Double) {
         activity?.runOnUiThread {
-            stepsTextView.text = "Steps Today: $steps"
+            stepsTextView.text = getString(R.string.step_goal, currentSteps, goalSteps)
+
+            val caloriesBurned = (currentSteps * caloriesPerStep).toInt()
+            caloriesBurnedTextView.text = getString(R.string.steps_calories_burned, caloriesBurned)
         }
     }
 }

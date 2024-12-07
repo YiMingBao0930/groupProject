@@ -4,65 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/project_background">
 
-    <ImageButton
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/exercise_toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="156dp"
         android:background="@color/project_background"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        android:paddingTop="30dp"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_arrow_back_24" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Step Progress Section -->
     <LinearLayout
         android:id="@+id/linearLayout11"
-        android:layout_width="361dp"
-        android:layout_height="122dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginEnd="26dp"
-        android:layout_marginBottom="517dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/white_rounded_corners"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back_button"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- Steps Label -->
         <TextView
-            android:id="@+id/steps"
+            android:id="@+id/steps_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Setps:"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="@string/step_goal"
             android:textSize="25dp" />
 
+        <!-- Centered Progress Bar -->
         <ProgressBar
             android:id="@+id/distance_progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:indeterminate="false"
             android:progressDrawable="@drawable/blue_rounded_corners"
             android:scaleY="1" />
 
+        <!-- Calories Burned Label -->
         <TextView
-            android:id="@+id/steps_text_view"
+            android:id="@+id/step_calorie_burned"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Steps Today: 0"
-            android:textSize="18sp"
+            android:text="@string/steps_calories_burned"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="15sp"
             android:layout_marginTop="16dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_marginLeft="4dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp" />
     </LinearLayout>
 
+    <!-- Exercise Section -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
@@ -71,13 +81,12 @@
         android:layout_marginEnd="26dp"
         android:layout_marginBottom="33dp"
         android:background="@drawable/gray_rounded_corners"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back_button">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
 
+        <!-- Exercise 1 Section -->
         <LinearLayout
             android:id="@+id/exercise1"
             android:layout_width="0dp"
@@ -89,10 +98,9 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
-
+        <!-- Exercise 2 Section -->
         <LinearLayout
             android:id="@+id/exercise2"
             android:layout_width="0dp"
@@ -103,12 +111,7 @@
             android:background="@drawable/white_rounded_corners"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </LinearLayout>
-
-
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

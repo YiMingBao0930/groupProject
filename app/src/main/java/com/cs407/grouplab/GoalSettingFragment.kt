@@ -52,6 +52,7 @@ class GoalSettingFragment : Fragment() {
     private lateinit var activityLevelSpinner: Spinner
     private lateinit var goalDateButton: Button
     private lateinit var confirmGoalButton: Button
+    private lateinit var goalStepsEditText: TextView
 
 
     // Example base caloric intake
@@ -91,6 +92,7 @@ class GoalSettingFragment : Fragment() {
         goalWeightTextEdit = view.findViewById(R.id.goalWeightTextEdit)
         recommendedCaloriesTextEdit = view.findViewById(R.id.recommendedCaloriesTextEdit)
         activityLevelSpinner = view.findViewById(R.id.activityLevelSpinner)
+        goalStepsEditText = view.findViewById(R.id.goalStepsTextEdit)
 
         goalDateButton = view.findViewById(R.id.goalDate_button)
         confirmGoalButton = view.findViewById((R.id.confirm_goal))
@@ -184,8 +186,6 @@ class GoalSettingFragment : Fragment() {
             }
         }
 
-
-
         return view
     }
 
@@ -206,6 +206,14 @@ class GoalSettingFragment : Fragment() {
             isValid = false
         } else {
             goalWeightTextEdit.error = null
+        }
+
+        // Check if goal steps is filled
+        if (goalStepsEditText.text.isEmpty()) {
+            goalStepsEditText.error = "Goal steps is required"
+            isValid = false
+        } else {
+            goalStepsEditText.error = null
         }
 
         // Check if goal date is selected
@@ -430,6 +438,7 @@ class GoalSettingFragment : Fragment() {
         val protein = proteinSlider.value.toInt()
         val fat = fatSlider.value.toInt()
         val carbs = carbsSlider.value.toInt()
+        val stepsGoal = goalStepsEditText.text.toString().toIntOrNull() ?: return
 
         val goal = UserGoal(
             username = username,
@@ -440,7 +449,8 @@ class GoalSettingFragment : Fragment() {
             dailyCalories = calories,
             proteinPercentage = protein,
             fatPercentage = fat,
-            carbsPercentage = carbs
+            carbsPercentage = carbs,
+            stepsGoal = stepsGoal
         )
 
         lifecycleScope.launch(Dispatchers.IO) {

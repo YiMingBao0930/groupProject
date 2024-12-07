@@ -18,8 +18,10 @@ data class UserGoal(
     val dailyCalories: Int,
     val proteinPercentage: Int,
     val fatPercentage: Int,
-    val carbsPercentage: Int
+    val carbsPercentage: Int,
+    val stepsGoal: Int
 )
+
 
 @Dao
 interface UserGoalDao {
