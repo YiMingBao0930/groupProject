@@ -1,9 +1,11 @@
 package com.cs407.grouplab
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -20,18 +22,29 @@ class AppHomePageFragment : Fragment() {
     private val Intake = floatArrayOf(98.8f, 123.8f, 161.6f)
     private val nutritionList = arrayOf("Protein", "Fat", "Carbohydrates")
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.home_page, container, false)
+
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupPieChart(view)
+        val testButton: Button = view.findViewById(R.id.test)
+
+        // Set click listener
+        testButton.setOnClickListener {
+            // Navigate to TestPage
+            val intent = Intent(requireContext(), MovementAndJumpTracker::class.java)
+            startActivity(intent)
+        }
 
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -108,6 +121,7 @@ class AppHomePageFragment : Fragment() {
                 else -> false
             }
         }
+
 
         val navigationView =
             view.findViewById<com.google.android.material.navigation.NavigationView>(R.id.navigationView)
