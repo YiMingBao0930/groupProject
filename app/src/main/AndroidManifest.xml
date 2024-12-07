@@ -5,6 +5,8 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -35,6 +37,7 @@
         <activity android:name=".Stats" />
         <activity android:name=".DailySummary"/>
         <activity android:name=".ExerciseMenu"/>
+        <activity android:name=".MovementAndJumpTracker"/>
 
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

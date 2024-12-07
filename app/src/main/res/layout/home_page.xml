@@ -108,9 +108,9 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/powder_blue_rounded_corners"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chart">
 
             <ImageView
@@ -157,6 +157,7 @@
 
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="322dp"
             android:layout_height="322dp"
             android:layout_marginStart="44dp"
@@ -173,6 +174,18 @@
                 android:textSize="35sp" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="208dp"
+            android:layout_marginBottom="310dp"
+            android:text="test"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout7"
+            app:layout_constraintTop_toBottomOf="@+id/chart"
+            app:layout_constraintVertical_bias="1.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
