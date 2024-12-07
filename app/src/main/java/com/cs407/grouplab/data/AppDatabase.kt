@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import com.cs407.grouplab.CaloriesRecord
+import com.cs407.grouplab.CaloriesRecordDao
 import com.cs407.grouplab.FoodItem
 import com.cs407.grouplab.FoodItemDao
 import com.cs407.grouplab.R
@@ -30,7 +32,8 @@ import java.util.Date
         FoodItem::class,
         UserNutritionLog::class,
         UserGoal::class,
-        StepRecord::class
+        StepRecord::class,
+        CaloriesRecord::class
     ],
     version = 3, // Increment the version number
     exportSchema = false
@@ -42,6 +45,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userNutritionLogDao(): UserNutritionLogDao
     abstract fun userGoalDao(): UserGoalDao
     abstract fun stepRecordDao(): StepRecordDao
+    abstract fun caloriesRecordDao(): CaloriesRecordDao
 
     //static method declaration
     companion object {

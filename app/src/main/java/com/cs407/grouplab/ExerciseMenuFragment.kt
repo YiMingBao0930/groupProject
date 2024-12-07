@@ -41,11 +41,16 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
     private lateinit var caloriesBurnedTextView: TextView
     private var today: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     private var global_steps = 0f
+    private lateinit var caloriesRecordDao: CaloriesRecordDao
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val db = AppDatabase.getDatabase(requireContext())
         stepRecordDao = db.stepRecordDao()
+        caloriesRecordDao = db.caloriesRecordDao()
+
 
         // Check and request permissions for activity recognition
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -167,10 +172,11 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
         }
     }
 
+    // uses formula based on weight and avg step time to get calories per step
     private fun calculateCaloriesPerStep(weightKg: Double): Double {
-        val MET = 0.035 // MET value for walking
-        val stepTimeInHours = 0.5 / 3600.0 // Average step time in hours
-        return MET * weightKg * stepTimeInHours
+        val met = 4.2
+        val stepTimeInHours = 0.5 / 3600.0
+        return met * weightKg * stepTimeInHours
     }
 
     private suspend fun saveSteps(stepsSinceLast: Int, currentSensorValue: Float) {
@@ -183,6 +189,7 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
 
         // Fetch the current user's step record for today
         val stepRecord = stepRecordDao.getStepRecordForDate(loggedInUser, today)
+        val caloriesRecord = caloriesRecordDao.getCaloriesRecordForDate(loggedInUser, today)
 
         // make sure first created step Record does not have sensor total steps
         if (highestRecord == null) {
@@ -206,6 +213,7 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
                     val goalSteps = userGoal?.stepsGoal ?: 0
                     val weightKg = userGoal?.currentWeight?.let { it / 2.205 } ?: 70.0 // Default to 70kg
                     val caloriesPerStep = calculateCaloriesPerStep(weightKg)
+                    caloriesRecordDao.updateCaloriesForDate(loggedInUser, today, (updatedSteps * caloriesPerStep).toFloat())
                     updateStepsView(updatedSteps, goalSteps, caloriesPerStep)
                 } else {
                     Log.d("ExerciseFragment", "No new steps to save for current user.")
@@ -231,6 +239,12 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
                             updatedSteps,
                             highestRecord.lastTotalSteps
                         )
+                        val userGoal = fetchUserGoal()
+                        val goalSteps = userGoal?.stepsGoal ?: 0
+                        val weightKg = userGoal?.currentWeight?.let { it / 2.205 } ?: 70.0 // Default to 70kg
+                        val caloriesPerStep = calculateCaloriesPerStep(weightKg)
+                        caloriesRecordDao.updateCaloriesForDate(highestRecord.username, highestRecord.date, (updatedSteps * caloriesPerStep).toFloat())
+
                         stepRecordDao.updateStepsAndLastTotal(
                             stepRecord.id,
                             stepRecord.steps,
@@ -296,14 +310,23 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
                 val weightKg = userGoal?.currentWeight?.let { it / 2.205 } ?: 70.0 // Default to 70kg
                 val caloriesPerStep = calculateCaloriesPerStep(weightKg)
                 updateStepsView(0, goalSteps, caloriesPerStep)
-                val dummyRecord =  StepRecord(
-                    username = "DUMMY STEP RECORD DO NOT LOG IN AS",
+                val dummyRecordName = "DUMMY STEP RECORD DO NOT LOG IN AS"
+                if (stepRecordDao.getEarliestStepRecordForUser(dummyRecordName) == null) {
+                    val dummyRecord = StepRecord(
+                        username = dummyRecordName,
+                        date = today,
+                        initialStepCount = 0f,
+                        steps = 0,
+                        lastTotalSteps = 0f
+                    )
+                    stepRecordDao.insertStepRecord(dummyRecord)
+                }
+                val newCaloriesRecord = CaloriesRecord(
+                    username = loggedInUser,
                     date = today,
-                    initialStepCount = 0f,
-                    steps = 0,
-                    lastTotalSteps = 0f
+                    caloriesBurned = 0f
                 )
-                stepRecordDao.insertStepRecord(dummyRecord)
+                caloriesRecordDao.insertCaloriesRecord(newCaloriesRecord)
                 val newRecord = StepRecord(
                     username = loggedInUser,
                     date = today,
