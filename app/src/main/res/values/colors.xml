@@ -18,5 +18,7 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="green">#32CD32</color>
     <color name="baby_bule">#99b8c7</color>
+    <color name="light_green">#83f72a</color>
+    <color name="red">#e80743</color>
 
 </resources>
