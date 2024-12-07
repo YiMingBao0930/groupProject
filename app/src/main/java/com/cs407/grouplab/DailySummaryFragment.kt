@@ -1,5 +1,7 @@
 package com.cs407.grouplab
 
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.grouplab.data.AppDatabase
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -69,6 +72,10 @@ class DailySummaryFragment : Fragment() {
     private fun loadWeeklyData() {
         lifecycleScope.launch {
             try {
+                // Get username from SharedPreferences
+                val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                val username = sharedPreferences.getString("logged_in_username", null) ?: "current_user"
+                
                 val calendar = Calendar.getInstance()
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 
@@ -82,7 +89,7 @@ class DailySummaryFragment : Fragment() {
                     
                     val dateStr = dateFormat.format(date)
                     val dailyNutrition = db.userNutritionLogDao()
-                        .getDailyNutrition("current_user", dateStr) 
+                        .getDailyNutrition(username, dateStr)  // Use actual username instead of "current_user"
                     
                     nutritionLogs.add(dailyNutrition)
                     calendar.add(Calendar.DAY_OF_YEAR, -1)
@@ -92,9 +99,23 @@ class DailySummaryFragment : Fragment() {
                 adapter.updateData(nutritionLogs, dates)
                 
             } catch (e: Exception) {
-                // Handle error (show error message to user)
                 e.printStackTrace()
             }
+        }
+    }
+
+    private fun configurePieChart(pieChart: PieChart) {
+        pieChart.apply {
+            description.isEnabled = false
+            legend.textSize = 16f  // Increased legend text size
+            legend.textColor = Color.WHITE
+            legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+            legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+            legend.orientation = Legend.LegendOrientation.HORIZONTAL
+            legend.setDrawInside(false)
+            setEntryLabelTextSize(16f)  // Increased label text size
+            setEntryLabelColor(Color.WHITE)
+            setExtraOffsets(20f, 20f, 20f, 20f)  // Add padding around the chart
         }
     }
 }
