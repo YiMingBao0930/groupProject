@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -98,11 +99,9 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
         // Initialize the stepsTextView
         stepsTextView = view.findViewById(R.id.steps_text_view)
         totalCaloriesBurnedTextView = view.findViewById(R.id.total_calories_burned)
-
-
+        val distanceProgressBar = view.findViewById<ProgressBar>(R.id.distance_progress_bar)
         // Reset `initialStepCount` when a new user logs in
         resetStepTrackingForNewUser()
-
 
         exerciseRecyclerView = view.findViewById(R.id.exercise_recycler_view)
         exerciseAdapter = ExerciseAdapter { exercise ->
@@ -155,6 +154,31 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
         val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val username = sharedPreferences.getString("logged_in_username", null)
         val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+        if (!username.isNullOrEmpty()) {
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val db = AppDatabase.getDatabase(requireContext())
+
+                val userGoal = db.userGoalDao().getUserGoal(username)
+                val goalSteps = userGoal?.stepsGoal ?: 0
+
+                val stepRecord = db.stepRecordDao().getStepRecordForDate(username, currentDate)
+                val currentSteps = stepRecord?.steps ?: 0
+
+                withContext(Dispatchers.Main) {
+                    // Update the progress bar
+                    if (goalSteps > 0) {
+                        val progress = (currentSteps.toFloat() / goalSteps.toFloat()) * 100
+                        distanceProgressBar.progress = progress.toInt()
+                    } else {
+                        distanceProgressBar.progress = 0
+                    }
+
+                    stepsTextView.text = getString(R.string.step_goal, currentSteps, goalSteps)
+                }
+            }
+        }
 
         if (!username.isNullOrEmpty()) {
             lifecycleScope.launch(Dispatchers.IO) {
