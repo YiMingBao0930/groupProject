@@ -127,16 +127,17 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
 
     private fun performSearch(query: String) {
         val db = AppDatabase.getDatabase(requireContext())
-        val liveDataResults = db.foodItemDao().searchFoodItems("%$query%")
-
-        liveDataResults.observe(viewLifecycleOwner) { results ->
-            if (results.isNullOrEmpty()) {
-                noResultsTextView.visibility = View.VISIBLE
-                foodRecyclerView.visibility = View.GONE
-            } else {
-                noResultsTextView.visibility = View.GONE
-                foodRecyclerView.visibility = View.VISIBLE
-                foodItemAdapter.setItems(results)
+        
+        lifecycleScope.launch {
+            db.foodItemDao().searchFoodItems("%$query%").collect { results ->
+                if (results.isNullOrEmpty()) {
+                    noResultsTextView.visibility = View.VISIBLE
+                    foodRecyclerView.visibility = View.GONE
+                } else {
+                    noResultsTextView.visibility = View.GONE
+                    foodRecyclerView.visibility = View.VISIBLE
+                    foodItemAdapter.setItems(results)
+                }
             }
         }
     }

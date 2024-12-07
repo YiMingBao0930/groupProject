@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FoodItemDao {
@@ -15,7 +16,7 @@ interface FoodItemDao {
     suspend fun delete(foodItem: FoodItem)
 
     @Query("SELECT * FROM food_items WHERE name LIKE :searchQuery ORDER BY name ASC")
-    fun searchFoodItems(searchQuery: String): LiveData<List<FoodItem>>
+    fun searchFoodItems(searchQuery: String): Flow<List<FoodItem>>
 
     @Insert
     suspend fun insertAll(foodItems: List<FoodItem>)

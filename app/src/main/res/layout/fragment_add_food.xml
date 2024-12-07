@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/project_background"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/add_food_toolbar"
@@ -15,25 +14,27 @@
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-
-    <Space
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
-        android:layout_height="24dp" />
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@color/project_sub"
+        android:queryHint="Search foods..."
+        app:iconifiedByDefault="false" />
 
-    <TextView
-        android:id="@+id/addFoodTitle"
-        android:layout_width="382dp"
-        android:layout_height="50dp"
-        android:fontFamily="sans-serif-black"
-        android:gravity="center_horizontal"
-        android:text="@string/food_nutrition"
-        android:textColor="@color/white"
-        android:textSize="36sp" />
-
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/food_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
-        android:layout_gravity="top"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="8dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:background="@color/project_background"
         android:padding="16dp">
 
@@ -607,10 +608,10 @@
         android:id="@+id/save_food_button"
         android:layout_width="280dp"
         android:layout_height="70dp"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center_horizontal"
         android:backgroundTint="#B7EDB3"
         android:fontFamily="@font/montserrat_semibold"
-
         android:text="@string/add_food"
         android:textAlignment="center"
         android:textColor="@color/black"

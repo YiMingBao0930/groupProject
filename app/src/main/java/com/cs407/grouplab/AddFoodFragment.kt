@@ -1,5 +1,6 @@
 package com.cs407.grouplab
 
+import AddToLogDialogFragment
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,8 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cs407.grouplab.data.AppDatabase
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.snackbar.Snackbar
@@ -40,6 +45,9 @@ class AddFoodFragment : Fragment() {
     private lateinit var ironInput: TextInputEditText
 
     private lateinit var saveFoodButton: Button
+    private lateinit var foodAdapter: FoodItemAdapter
+    private lateinit var searchView: SearchView
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,6 +94,23 @@ class AddFoodFragment : Fragment() {
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack() // Navigate back to the previous fragment
         }
+
+        // Initialize RecyclerView
+        recyclerView = view.findViewById(R.id.food_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        foodAdapter = FoodItemAdapter(object : FoodItemAdapter.OnItemClickListener {
+            override fun onItemClick(foodItem: FoodItem) {
+                showAddToLogDialog(foodItem)
+            }
+        })
+        recyclerView.adapter = foodAdapter
+
+        // Initialize SearchView
+        searchView = view.findViewById(R.id.search_view)
+        setupSearch()
+
+        // Load initial data
+        loadFoodItems("")
 
         // Set up save button listener
         saveFoodButton.setOnClickListener {
@@ -197,6 +222,36 @@ class AddFoodFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setupSearch() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                loadFoodItems(query ?: "")
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                loadFoodItems(newText ?: "")
+                return true
+            }
+        })
+    }
+
+    private fun loadFoodItems(query: String) {
+        val searchQuery = "%$query%"
+        val db = AppDatabase.getDatabase(requireContext())
+        
+        lifecycleScope.launch {
+            db.foodItemDao().searchFoodItems(searchQuery).collect { foodItems ->
+                foodAdapter.setItems(foodItems)
+            }
+        }
+    }
+
+    private fun showAddToLogDialog(foodItem: FoodItem) {
+        val dialog = AddToLogDialogFragment(foodItem)
+        dialog.show(parentFragmentManager, "AddToLogDialog")
     }
 
 }
