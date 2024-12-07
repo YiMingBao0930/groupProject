@@ -32,9 +32,11 @@ class AddToLogDialogFragment(private val foodItem: FoodItem) : DialogFragment() 
         val view = inflater.inflate(R.layout.dialog_add_to_log, container, false)
 
         val foodNameText: TextView = view.findViewById(R.id.food_name_text)
+
         servingInput = view.findViewById(R.id.serving_input) // Renamed for consistency
         confirmButton = view.findViewById(R.id.confirm_button)
         cancelButton = view.findViewById(R.id.cancel_button)
+
 
         foodNameText.text = foodItem.name
 

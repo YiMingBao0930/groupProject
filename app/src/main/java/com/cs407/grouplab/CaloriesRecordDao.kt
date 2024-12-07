@@ -1,5 +1,6 @@
 package com.cs407.grouplab
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Entity
 import androidx.room.Insert
@@ -21,7 +22,7 @@ interface CaloriesRecordDao {
     suspend fun insertCaloriesRecord(record: CaloriesRecord)
 
     @Query("SELECT * FROM calories_records WHERE username = :username AND date = :date LIMIT 1")
-    suspend fun getCaloriesRecordForDate(username: String, date: String): CaloriesRecord?
+    fun getCaloriesRecordForDate(username: String, date: String): LiveData<CaloriesRecord?>
 
     @Query("UPDATE calories_records SET caloriesBurned = :updatedCalories WHERE username = :username AND date = :date")
     suspend fun updateCaloriesForDate(username: String, date: String, updatedCalories: Float)

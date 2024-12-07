@@ -28,6 +28,7 @@ class LogExerciseDialogFragment(private val exercise: Exercise) : DialogFragment
         val timeSpentInput: EditText = view.findViewById(R.id.time_spent_input)
         val confirmButton: Button = view.findViewById(R.id.confirm_button)
 
+
         nameText.text = exercise.name
 
         confirmButton.setOnClickListener {
@@ -66,6 +67,13 @@ class LogExerciseDialogFragment(private val exercise: Exercise) : DialogFragment
                 db.exerciseLogDao().insertExerciseLog(log)
             }
         }
+    }
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 
 }

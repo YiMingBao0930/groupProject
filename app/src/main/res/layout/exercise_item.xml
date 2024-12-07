@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_semibold"
             android:layout_marginTop="4dp"
-            android:textColor="@color/white"
+            android:textColor="@color/project_hint"
             android:textSize="14sp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

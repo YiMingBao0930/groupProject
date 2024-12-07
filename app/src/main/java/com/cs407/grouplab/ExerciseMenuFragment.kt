@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,6 +48,8 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
     private lateinit var caloriesRecordDao: CaloriesRecordDao
     private lateinit var exerciseRecyclerView: RecyclerView
     private lateinit var exerciseAdapter: ExerciseAdapter
+    private lateinit var totalCaloriesBurnedTextView: TextView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,6 +97,8 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
 
         // Initialize the stepsTextView
         stepsTextView = view.findViewById(R.id.steps_text_view)
+        totalCaloriesBurnedTextView = view.findViewById(R.id.total_calories_burned)
+
 
         // Reset `initialStepCount` when a new user logs in
         resetStepTrackingForNewUser()
@@ -146,6 +151,41 @@ class ExerciseMenuFragment : Fragment(), SensorEventListener {
             val caloriesPerStep = calculateCaloriesPerStep(weightKg)
             //updateStepsView(0, goalSteps, caloriesPerStep) // Set initial steps to 0
         }
+
+        val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("logged_in_username", null)
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+        if (!username.isNullOrEmpty()) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val db = AppDatabase.getDatabase(requireContext())
+
+                // Retrieve the LiveData objects for exercise and step calories
+                val exerciseCaloriesLive = db.exerciseLogDao().getTotalCaloriesBurned(username, currentDate)
+                val stepCaloriesLive = db.caloriesRecordDao().getCaloriesRecordForDate(username, currentDate)
+
+                withContext(Dispatchers.Main) {
+                    // Observe LiveData for exercise calories
+                    exerciseCaloriesLive.observe(viewLifecycleOwner) { exerciseCalories ->
+                        // Observe LiveData for step calories
+                        stepCaloriesLive.observe(viewLifecycleOwner) { stepCaloriesRecord ->
+                            val exerciseCaloriesValue = exerciseCalories ?: 0f
+                            val stepCaloriesValue = stepCaloriesRecord?.caloriesBurned ?: 0f
+
+                            val totalCalories = exerciseCaloriesValue + stepCaloriesValue
+
+                            // Update the total calories burned text view
+                            totalCaloriesBurnedTextView.text = getString(
+                                R.string.total_calories_burned,
+                                totalCalories.toInt()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
     private suspend fun fetchUserGoal(): UserGoal? {

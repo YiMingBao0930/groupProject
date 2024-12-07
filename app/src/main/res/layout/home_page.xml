@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/black">
+    android:background="@color/project_background">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
