@@ -54,10 +54,13 @@
             android:scaleY="1" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/steps_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Steps Today: 0"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
