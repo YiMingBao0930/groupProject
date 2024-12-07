@@ -20,7 +20,7 @@ class MovementAndJumpTracker : AppCompatActivity() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var sensorManager: SensorManager
-    private lateinit var accelerometer: Sensor
+    private var accelerometer: Sensor? = null
 
     private var jumpCount = 0
     private var isJumping = false
@@ -36,7 +36,6 @@ class MovementAndJumpTracker : AppCompatActivity() {
         // Initialize GPS and sensor services
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
 
         // Check and request location permissions
         checkAndRequestPermissions()
@@ -58,8 +57,8 @@ class MovementAndJumpTracker : AppCompatActivity() {
     }
 
     private fun startLocationUpdates() {
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000L).apply {
-            setMinUpdateIntervalMillis(2000L) // Fastest interval
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000L).apply {
+            setMinUpdateIntervalMillis(500L) // Fastest interval: 0.5 seconds
         }.build()
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -81,14 +80,23 @@ class MovementAndJumpTracker : AppCompatActivity() {
 
     private fun updateLocationData(location: Location) {
         if (lastLocation != null) {
-            totalDistance += lastLocation!!.distanceTo(location) / 1000.0 // Convert to kilometers
+            val distanceDelta = lastLocation!!.distanceTo(location) / 1000.0 // Convert meters to kilometers
+            totalDistance += distanceDelta
         }
         lastLocation = location
 
+        // Update the UI
         findViewById<TextView>(R.id.distance_text).text = "Distance: %.2f km".format(totalDistance)
     }
 
     private fun startJumpTracking() {
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        if (accelerometer == null) {
+            Toast.makeText(this, "Accelerometer sensor not available", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_UI)
     }
 
