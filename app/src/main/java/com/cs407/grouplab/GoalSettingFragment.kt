@@ -417,10 +417,10 @@ class GoalSettingFragment : Fragment() {
         val currentWeight = curWeightTextEdit.text.toString().toFloatOrNull() ?: return
         val goalWeight = goalWeightTextEdit.text.toString().toFloatOrNull() ?: return
         val targetDate = try {
-            SimpleDateFormat(
-                "MM/dd/yyyy",
-                Locale.getDefault()
-            ).parse(goalDateButton.text.toString())
+            val inputDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+            val outputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val parsedDate = inputDateFormat.parse(goalDateButton.text.toString())
+            outputDateFormat.format(parsedDate) // Format the parsed date to yyyy-MM-dd
         } catch (e: Exception) {
             null
         } ?: return
