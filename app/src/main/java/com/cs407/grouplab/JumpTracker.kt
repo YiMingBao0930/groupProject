@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-class MovementAndJumpTracker : AppCompatActivity() {
+class JumpTracker : AppCompatActivity() {
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
 
