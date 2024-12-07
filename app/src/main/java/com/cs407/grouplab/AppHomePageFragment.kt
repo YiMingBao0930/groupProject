@@ -37,14 +37,6 @@ class AppHomePageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupPieChart(view)
-        val testButton: Button = view.findViewById(R.id.test)
-
-        // Set click listener
-        testButton.setOnClickListener {
-            // Navigate to TestPage
-            val intent = Intent(requireContext(), JumpTracker::class.java)
-            startActivity(intent)
-        }
 
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->
