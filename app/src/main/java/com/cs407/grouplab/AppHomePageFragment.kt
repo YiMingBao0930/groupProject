@@ -42,7 +42,7 @@ class AppHomePageFragment : Fragment() {
         // Set click listener
         testButton.setOnClickListener {
             // Navigate to TestPage
-            val intent = Intent(requireContext(), MovementAndJumpTracker::class.java)
+            val intent = Intent(requireContext(), JumpTracker::class.java)
             startActivity(intent)
         }
 
