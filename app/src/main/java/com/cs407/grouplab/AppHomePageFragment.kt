@@ -65,7 +65,7 @@ class AppHomePageFragment : Fragment() {
                     true
                 }
                 R.id.nav_walk -> {
-                    val fragment = ExerciseMenuFragment() // Replace with your ExerciseMenuFragment
+                    val fragment = ExerciseMenuFragment()
                     parentFragmentManager.beginTransaction()
                         .setCustomAnimations(
                             R.anim.slide_in_right,

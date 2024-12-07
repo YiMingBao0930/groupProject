@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.cs407.grouplab"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -48,6 +48,11 @@ dependencies {
     // To use Kotlin Symbol Processing (KSP)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+
+    implementation ("com.google.android.gms:play-services-fitness:21.0.0")
+    implementation ("com.google.android.gms:play-services-auth:20.7.0")
+
+
 
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

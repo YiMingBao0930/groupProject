@@ -9,6 +9,8 @@ import androidx.room.TypeConverters
 import com.cs407.grouplab.FoodItem
 import com.cs407.grouplab.FoodItemDao
 import com.cs407.grouplab.R
+import com.cs407.grouplab.StepRecord
+import com.cs407.grouplab.StepRecordDao
 import com.cs407.grouplab.UserNutritionLog
 import com.cs407.grouplab.UserNutritionLogDao
 import com.cs407.grouplab.UserGoal
@@ -25,11 +27,12 @@ import java.util.Date
 //this is the database class which is used to create the database
 @Database(
     entities = [
-    FoodItem::class,
-    UserNutritionLog::class,
-    UserGoal::class
-               ],
-    version = 2,
+        FoodItem::class,
+        UserNutritionLog::class,
+        UserGoal::class,
+        StepRecord::class
+    ],
+    version = 3, // Increment the version number
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)
@@ -38,6 +41,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun foodItemDao(): FoodItemDao
     abstract fun userNutritionLogDao(): UserNutritionLogDao
     abstract fun userGoalDao(): UserGoalDao
+    abstract fun stepRecordDao(): StepRecordDao
 
     //static method declaration
     companion object {
