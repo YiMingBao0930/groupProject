@@ -67,5 +67,6 @@
     <string name="total_calories_burned">Total Calories Burned: %1$d kCal</string>
     <string name="exercise_time_hint">Enter time spent (minutes)</string>
     <string name="confirm_add_exercise">Confirm</string>
+    <string name="recommendation_title">Today\'s Recommendations</string>
 
 </resources>

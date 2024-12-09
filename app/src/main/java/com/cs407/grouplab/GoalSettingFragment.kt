@@ -439,6 +439,24 @@ class GoalSettingFragment : Fragment() {
         val fat = fatSlider.value.toInt()
         val carbs = carbsSlider.value.toInt()
         val stepsGoal = goalStepsEditText.text.toString().toIntOrNull() ?: return
+        val proteinGrams = proteinGTextView.text.toString()
+            .replace("Protein:", "")
+            .replace("g", "")
+            .trim()
+            .toIntOrNull() ?: 0
+
+        val carbGrams = carbsGTextView.text.toString()
+            .replace("Carbs:", "")
+            .replace("g", "")
+            .trim()
+            .toIntOrNull() ?: 0
+
+        val fatGrams = fatGTextView.text.toString()
+            .replace("Fat:", "")
+            .replace("g", "")
+            .trim()
+            .toIntOrNull() ?: 0
+
 
         val goal = UserGoal(
             username = username,
@@ -450,16 +468,26 @@ class GoalSettingFragment : Fragment() {
             proteinPercentage = protein,
             fatPercentage = fat,
             carbsPercentage = carbs,
+            proteinGram = proteinGrams,
+            carbGram = carbGrams,
+            fatGram = fatGrams,
             stepsGoal = stepsGoal
         )
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 AppDatabase.getDatabase(requireContext()).userGoalDao().insert(goal)
+                populateFoodDatabase(AppDatabase.getDatabase(requireContext()).foodItemDao())
                 withContext(Dispatchers.Main) {
                     // Navigate to home page on success
                     val fragment = AppHomePageFragment()
                     parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                         R.anim.slide_in_right,
+                         R.anim.slide_out_left,
+                         R.anim.slide_in_right,
+                         R.anim.slide_out_left
+                        )
                         .replace(R.id.fragment_container, fragment)
                         .addToBackStack(null)
                         .commit()

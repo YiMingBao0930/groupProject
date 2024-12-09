@@ -1,5 +1,6 @@
 package com.cs407.grouplab
 
+import AddToLogDialogFragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +17,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.cs407.grouplab.data.AppDatabase
 import com.github.mikephil.charting.charts.PieChart
@@ -33,6 +36,8 @@ class AppHomePageFragment : Fragment() {
     private lateinit var db: AppDatabase
     private lateinit var userNutritionLogDao: UserNutritionLogDao
     private val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    private var cachedMealType: String? = null
+    private var cachedRecommendation: MealRecommendation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,17 @@ class AppHomePageFragment : Fragment() {
     private fun getCurrentUsername(): String? {
         val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("logged_in_username", null)
+    }
+
+    private fun getCurrentMealType(): String {
+        val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        return when (hour) {
+            in 6..10 -> "Breakfast"
+            in 11..13 -> "Lunch"
+            in 14..16 -> "Snack"
+            in 17..20 -> "Dinner"
+            else -> "LateMeal"
+        }
     }
 
     override fun onCreateView(
@@ -60,6 +76,7 @@ class AppHomePageFragment : Fragment() {
 
         // Fetch nutrition data and update UI
         fetchNutritionData(view)
+        displayRecommendations(view)
 
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -171,6 +188,73 @@ class AppHomePageFragment : Fragment() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
     }
+
+    private fun displayRecommendations(view: View) {
+        val username = getCurrentUsername()
+        if (username == null) {
+            // Handle case where user is not logged in
+            return
+        }
+
+        val currentMealType = getCurrentMealType()
+
+        // Check if the recommendation is already cached for the current meal type
+        if (cachedMealType == currentMealType && cachedRecommendation != null) {
+            updateRecommendationUI(view, cachedRecommendation)
+            return
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                // Get the meal recommendation
+                val recommendation = recommendMealByTime(
+                    username = username,
+                    foodItemDao = db.foodItemDao(),
+                    userGoalDao = db.userGoalDao(),
+                    userNutritionLogDao = db.userNutritionLogDao()
+                )
+
+                // Cache the recommendation and meal type
+                cachedMealType = currentMealType
+                cachedRecommendation = recommendation
+
+                withContext(Dispatchers.Main) {
+                    updateRecommendationUI(view, recommendation)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Error loading recommendations", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun updateRecommendationUI(view: View, recommendation: MealRecommendation?) {
+        val titleTextView = view.findViewById<TextView>(R.id.recommendation_title)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recommendation_recycler_view)
+
+        if (recommendation != null) {
+            // Update the recommendation title with the meal type
+            titleTextView.text = "${recommendation.mealType} Recommendations"
+
+            // Update the RecyclerView with recommended foods and servings
+            recyclerView.adapter = RecommendationAdapter(recommendation.foods) { foodRecommendation ->
+                showAddToLogDialog(foodRecommendation.food) // Handle item click
+            }
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        } else {
+            // No recommendations available
+            titleTextView.text = "No Recommendations Available"
+            recyclerView.adapter = RecommendationAdapter(emptyList(), {})
+        }
+    }
+
+    private fun showAddToLogDialog(foodItem: FoodItem) {
+        val dialog = AddToLogDialogFragment(foodItem)
+        dialog.show(childFragmentManager, "AddToLogDialog")
+    }
+
 
     private fun fetchNutritionData(view: View) {
         val username = getCurrentUsername()

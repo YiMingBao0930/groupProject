@@ -17,6 +17,9 @@ data class UserGoal(
     val activityLevel: Int,
     val dailyCalories: Int,
     val proteinPercentage: Int,
+    val proteinGram: Int,
+    val fatGram: Int,
+    val carbGram: Int,
     val fatPercentage: Int,
     val carbsPercentage: Int,
     val stepsGoal: Int
