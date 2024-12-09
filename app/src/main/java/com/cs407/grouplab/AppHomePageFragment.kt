@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -77,6 +78,7 @@ class AppHomePageFragment : Fragment() {
         // Fetch nutrition data and update UI
         fetchNutritionData(view)
         displayRecommendations(view)
+        updateStepsUI(view)
 
         val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -189,6 +191,25 @@ class AppHomePageFragment : Fragment() {
         }
     }
 
+    private val stepUpdateHandler = android.os.Handler()
+    private val stepUpdateRunnable = object : Runnable {
+        override fun run() {
+            val rootView = view ?: return
+            updateStepsUI(rootView)
+            stepUpdateHandler.postDelayed(this, 30000) // Update every 30 seconds
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        stepUpdateHandler.post(stepUpdateRunnable)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        stepUpdateHandler.removeCallbacks(stepUpdateRunnable)
+    }
+
     private fun displayRecommendations(view: View) {
         val username = getCurrentUsername()
         if (username == null) {
@@ -229,6 +250,38 @@ class AppHomePageFragment : Fragment() {
             }
         }
     }
+
+    private fun updateStepsUI(view: View) {
+        val username = getCurrentUsername() ?: return
+        val stepsTextView = view.findViewById<TextView>(R.id.steps_text)
+        val stepsProgressBar = view.findViewById<ProgressBar>(R.id.steps_progress_bar)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                val userGoalDao = db.userGoalDao()
+                val stepRecordDao = db.stepRecordDao()
+
+                val userGoal = userGoalDao.getUserGoal(username)
+                val stepRecord = stepRecordDao.getStepRecordForDate(username, currentDate)
+
+                val stepsGoal = userGoal?.stepsGoal ?: 10000
+                val steps = stepRecord?.steps ?: 0
+
+                withContext(Dispatchers.Main) {
+                    stepsTextView.text = "Steps: $steps/$stepsGoal"
+                    stepsProgressBar.max = stepsGoal
+                    stepsProgressBar.progress = steps
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Error fetching step data", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     private fun updateRecommendationUI(view: View, recommendation: MealRecommendation?) {
         val titleTextView = view.findViewById<TextView>(R.id.recommendation_title)
