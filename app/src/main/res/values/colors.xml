@@ -4,18 +4,24 @@
     <color name="white">#FFFFFFFF</color>
     <color name="project_background">#0d0d0d</color>
     <color name="project_accent">#B7EDB3</color>
+    <color name="project_accent_grad">#66AB60</color>
     <color name="cadmium_violet">#8541A9</color>
     <color name="project_hint">#909090</color>
     <color name="project_sub">#202020</color>
     <color name="protein_color">#f0ffc124</color>
+    <color name="protein_grad">#F0FFD879</color>
+    <color name="carb_grad">#E0F68862</color>
     <color name="carb_color">#e0FF6F3B</color>
     <color name="fat_color">#e059E8FE</color>
+    <color name="fat_grad">#E089ECFD</color>
     <color name="gray">#e0e0e0</color>
     
     <color name="colorPrimary">#673AB7</color>
     <color name="colorPrimaryDark">#512DA8</color>
     <color name="colorAccent">#FF5252</color>
     <color name="colorPrimaryText">#212121</color>
+    <color name="pink">#C053C7</color>
+    <color name="pink_grad">#D689DB</color>
     <color name="green">#32CD32</color>
     <color name="baby_bule">#99b8c7</color>
     <color name="light_green">#83f72a</color>

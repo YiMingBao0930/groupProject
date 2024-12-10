@@ -12,8 +12,8 @@
         <clip>
             <shape android:shape="rectangle">
                 <gradient
-                    android:startColor="#FFC107"
-                    android:endColor="#FF5722"
+                    android:startColor="@color/protein_color"
+                    android:endColor="@color/protein_grad"
                     android:angle="0" />
                 <corners android:radius="50dp" />
             </shape>
