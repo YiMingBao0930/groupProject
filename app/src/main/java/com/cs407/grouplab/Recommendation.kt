@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
@@ -68,6 +70,7 @@ class Recommendation : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.recommendation, container, false)
 
     }
@@ -91,20 +94,21 @@ class Recommendation : Fragment() {
         suggestedFat = view.findViewById(R.id.suggestedFat)
         suggestedProtein = view.findViewById(R.id.suggestedProtein)
         suggestedCarb = view.findViewById(R.id.suggestedCarb)
-        val backButton: ImageButton = view.findViewById(R.id.back_button)
 
-        backButton.setOnClickListener {
-            val fragment = AppHomePageFragment() // Create an instance of the Recommendation fragment
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right, // Optional animations
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.fragment_container, fragment) // Replace with the ID of your fragment container
-                .addToBackStack(null) // Add to back stack to allow navigation back
-                .commit()
+        // Set up the Toolbar
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar4)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // Enable the back button in the toolbar
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = "" // Hide the toolbar title text
+        }
+
+        // Handle back button click
+        toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack() // Navigate back to the previous fragment
         }
 
         loadUserStats(view)
@@ -209,12 +213,12 @@ class Recommendation : Fragment() {
                     val recommendedCalories = userGoal?.dailyCalories ?: 2000
 
                     // Calculate recommended macros
-                    val recommendedCarbs = (recommendedCalories * 0.3).toInt()
-                    val recommendedCarbsMax = (recommendedCalories * 0.5).toInt()
-                    val recommendedProtein = (recommendedCalories * 0.25).toInt()
-                    val recommendedProteinMax = (recommendedCalories * 0.35).toInt()
-                    val recommendedFat = (recommendedCalories * 0.2).toInt()
-                    val recommendedFatMax = (recommendedCalories * 0.35).toInt()
+                    val recommendedCarbs = (recommendedCalories * 0.3).toInt() / 4
+                    val recommendedCarbsMax = (recommendedCalories * 0.5).toInt() /  4
+                    val recommendedProtein = (recommendedCalories * 0.25).toInt() / 4
+                    val recommendedProteinMax = (recommendedCalories * 0.35).toInt() / 4
+                    val recommendedFat = (recommendedCalories * 0.2).toInt() / 9
+                    val recommendedFatMax = (recommendedCalories * 0.35).toInt() / 9
 
 
                     // Retrieve daily nutrition log

@@ -18,27 +18,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Food Review Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/foodReviewButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="57dp"
-        android:backgroundTint="@color/project_accent"
-        android:fontFamily="@font/montserrat_semibold"
-        android:text="View Diet Reviews"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:cornerRadius="24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
 
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="0dp"
-        android:layout_height="360dp"
+        android:layout_height="430dp"
         android:layout_marginStart="21dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="21dp"
@@ -49,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/foodReviewButton">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_food">
 
 
         <TextView

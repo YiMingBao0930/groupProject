@@ -149,7 +149,7 @@
                 android:layout_height="8dp"
                 android:layout_marginTop="8dp"
                 android:progress="0"
-                android:progressDrawable="@drawable/purple_rounded_corners" />
+                android:progressDrawable="@drawable/blue_rounded_corners" />
         </LinearLayout>
 
         <LinearLayout

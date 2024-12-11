@@ -69,5 +69,6 @@
     <string name="confirm_add_exercise">Confirm</string>
     <string name="recommendation_title">Today\'s Recommendations</string>
     <string name="scan_food_barcode">Add Food With Barcode</string>
+    <string name="review">Nutrition Review</string>
 
 </resources>

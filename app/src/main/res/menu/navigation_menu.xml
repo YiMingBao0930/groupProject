@@ -26,6 +26,11 @@
         android:title="@string/yourGoals"
         />
 
+    <item android:id="@+id/review"
+        android:icon="@drawable/ic_review"
+        android:title="@string/review"
+        />
+
     <item android:id="@+id/about"
         android:icon="@drawable/ic_about"
         android:title="@string/about"
