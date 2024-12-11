@@ -186,6 +186,8 @@ class GoalSettingFragment : Fragment() {
             }
         }
 
+        loadUserGoals()
+
         return view
     }
 
@@ -254,41 +256,58 @@ class GoalSettingFragment : Fragment() {
 
             if (currentWeight != null && goalWeight != null) {
                 try {
+                    // Calculate BMR (using Mifflin-St Jeor equation)
+                    val weightKg = currentWeight / 2.205 // Convert lbs to kg
+                    val bmr = (10 * weightKg + 6.25 * 170 - 5 * 30 + 5).toInt() // Assuming height=170cm, age=30, male
+                    baseCalories = bmr
+
                     // Parse the goal date
                     val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
                     val goalDate = sdf.parse(goalDateText)
                     val today = Calendar.getInstance().time
 
                     // Calculate days until goal date
-                    val daysUntilGoal =
-                        ((goalDate!!.time - today.time) / (1000 * 60 * 60 * 24)).toInt()
+                    val daysUntilGoal = ((goalDate!!.time - today.time) / (1000 * 60 * 60 * 24)).toInt()
 
-                    // Calculate daily calorie adjustment
+                    // Calculate daily calorie adjustment based on weight goal
                     val weightDifference = goalWeight - currentWeight
-                    val totalCalorieChange =
-                        (weightDifference * 3500).toInt() // 3500 calories per pound
-                    val dailyCalorieChange =
-                        (totalCalorieChange / daysUntilGoal).coerceIn(-1000, 1000)
+                    val totalCalorieChange = (weightDifference * 3500).toInt() // 3500 calories per pound
+                    val dailyCalorieChange = if (daysUntilGoal > 0) {
+                        (totalCalorieChange / daysUntilGoal).coerceIn(-1000, 1000) // Limit daily adjustment
+                    } else {
+                        0 // No adjustment if goal date is today
+                    }
 
                     // Adjust base calories based on activity level
                     val activityFactor = when (activityLevelSpinner.selectedItemPosition) {
-                        0 -> 1.2f // Sedentary
-                        1 -> 1.375f // Lightly Active
-                        2 -> 1.55f // Moderately Active
-                        3 -> 1.725f // Very Active
-                        else -> 1.2f
+                        0 -> 1.2f    // Sedentary (little or no exercise)
+                        1 -> 1.375f  // Lightly Active (exercise 1-3 days/week)
+                        2 -> 1.55f   // Moderately Active (exercise 3-5 days/week)
+                        3 -> 1.725f  // Very Active (exercise 6-7 days/week)
+                        else -> 1.2f // Default to sedentary if something goes wrong
                     }
 
-                    recommendedCalories =
-                        ((baseCalories + dailyCalorieChange) * activityFactor).roundToInt()
-                    recommendedCaloriesTextEdit.setText("$recommendedCalories")
+                    // Calculate final recommended calories
+                    recommendedCalories = ((baseCalories * activityFactor) + dailyCalorieChange).roundToInt()
+                    
+                    // Ensure minimum safe calories (1200 for women, 1500 for men)
+                    val minimumCalories = 1500 // Using male minimum as default
+                    recommendedCalories = recommendedCalories.coerceAtLeast(minimumCalories)
+                    
+                    // Update UI
+                    recommendedCaloriesTextEdit.setText(recommendedCalories.toString())
 
-                    // Update macronutrient ratios
+                    // Update macronutrient ratios based on new calorie goal
                     setDefaultMacroRatios()
                     updateTextViews()
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    // Handle any parsing errors
+                    // Show error message to user
+                    Snackbar.make(
+                        requireView(),
+                        "Error calculating calories. Please check your inputs.",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -495,6 +514,54 @@ class GoalSettingFragment : Fragment() {
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Snackbar.make(requireView(), "Error saving goals", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun loadUserGoals() {
+        val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("logged_in_username", null) ?: return
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val userGoal = AppDatabase.getDatabase(requireContext()).userGoalDao().getUserGoal(username)
+                
+                withContext(Dispatchers.Main) {
+                    userGoal?.let { goal ->
+                        // Update weight fields
+                        curWeightTextEdit.setText(goal.currentWeight.toString())
+                        goalWeightTextEdit.setText(goal.goalWeight.toString())
+                        
+                        // Update goal date
+                        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        val displayFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                        val date = dateFormat.parse(goal.targetDate)
+                        date?.let {
+                            goalDateButton.text = displayFormat.format(it)
+                        }
+                        
+                        // Update activity level
+                        activityLevelSpinner.setSelection(goal.activityLevel)
+                        
+                        // Update calories
+                        recommendedCaloriesTextEdit.setText(goal.dailyCalories.toString())
+                        
+                        // Update macro sliders
+                        proteinSlider.value = goal.proteinPercentage.toFloat()
+                        fatSlider.value = goal.fatPercentage.toFloat()
+                        carbsSlider.value = goal.carbsPercentage.toFloat()
+                        
+                        // Update steps goal
+                        goalStepsEditText.setText(goal.stepsGoal.toString())
+                        
+                        // Update macro text views
+                        updateTextViews()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Snackbar.make(requireView(), "Error loading goals", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
