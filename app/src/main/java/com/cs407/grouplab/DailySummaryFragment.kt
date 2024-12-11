@@ -198,12 +198,23 @@ class DailySummaryFragment : Fragment() {
     ) {
 
         // Calorie Progress
+        // Calorie Progress
         val caloriesProgressBar = view?.findViewById<ProgressBar>(R.id.calories_progress_bar)
-        ObjectAnimator.ofInt(caloriesProgressBar, "progress", protein).setDuration(2000).start()
-        caloriesProgressBar?.progress = nutrition.totalCalories
-        caloriesProgressBar?.max = user_goal.dailyCalories
+        val totalCalories = nutrition.totalCalories
+        val dailyCalories = user_goal.dailyCalories
+
+        if (caloriesProgressBar != null) {
+            ObjectAnimator.ofInt(caloriesProgressBar, "progress", totalCalories).apply {
+                duration = 2000 // 2 seconds
+                start()
+            }
+            caloriesProgressBar.max = dailyCalories
+        }
+
+// Update the text for actual and goal calories
         val caloriesActualGoal = view?.findViewById<TextView>(R.id.calories_actual_goal)
-        caloriesActualGoal?.text = "${nutrition.totalCalories} kCal / ${user_goal.dailyCalories} kCal"
+        caloriesActualGoal?.text = "$totalCalories kCal / $dailyCalories kCal"
+
 
         // Protein Progress
         val proteinProgressBar = view?.findViewById<ProgressBar>(R.id.protein_progress_bar)

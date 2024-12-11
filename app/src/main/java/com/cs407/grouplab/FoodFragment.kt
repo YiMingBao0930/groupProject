@@ -114,8 +114,18 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
         }
 
         // Handle back button click
+        // Handle back button click to navigate to the home page
         toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack() // Navigate back to the previous fragment
+            val homeFragment = AppHomePageFragment()
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+                .replace(R.id.fragment_container, homeFragment)
+                .commit()
         }
 
         // Navigate to AddFoodFragment
