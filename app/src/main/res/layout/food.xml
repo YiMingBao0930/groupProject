@@ -17,16 +17,15 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout13"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="400dp"
         android:layout_marginStart="21dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="21dp"
         android:background="@drawable/gray_rounded_corners"
         android:backgroundTint="@color/project_sub"
@@ -35,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_food">
 
 
         <TextView
@@ -56,7 +55,7 @@
             android:id="@+id/food_search_view"
             android:layout_width="343dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/gray_rounded_corners"
+            android:background="@drawable/light_gray_rounded_corners"
             android:tooltipText="ex. carrot" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -80,137 +79,53 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout10"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="250dp"
-        android:background="@drawable/gray_rounded_corners"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="59dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="0dp"
-            android:text="Fat"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-        <ImageView
-            android:id="@+id/fatLight"
-            android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:contentDescription="@string/circle"
-            android:src="@drawable/ic_yellow_circle" />
-        <TextView
-            android:id="@+id/fatReview"
-            android:layout_width="316dp"
-            android:layout_height="57dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="-15dp"
-            android:text=""
-            android:textSize="11dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="341dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="0dp"
-            android:text="Protein"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-        <ImageView
-            android:id="@+id/proteinLight"
-            android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:contentDescription="@string/circle"
-            android:src="@drawable/ic_yellow_circle" />
-        <TextView
-            android:id="@+id/proteinReview"
-            android:layout_width="316dp"
-            android:layout_height="57dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="-15dp"
-            android:text=""
-            android:textSize="11dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="341dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="0dp"
-            android:text="Carbohydrates"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-        <ImageView
-            android:id="@+id/carbLight"
-            android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:contentDescription="@string/circle"
-            android:src="@drawable/ic_yellow_circle" />
-        <TextView
-            android:id="@+id/carbReview"
-            android:layout_width="316dp"
-            android:layout_height="57dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="-15dp"
-            android:text=""
-            android:textSize="11dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout13"
-        android:layout_width="369dp"
+        android:layout_width="wrap_content"
         android:layout_height="120dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout10">
+        app:layout_constraintTop_toBottomOf="@id/linearLayout8">
+
+        <TextView
+            android:id="@+id/scan_food_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Scan Food into Database"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/jumptoscanpage"
-            android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/project_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/project_background"
             app:srcCompat="@drawable/barcodespro_upca" />
     </LinearLayout>
 
+
     <LinearLayout
         android:id="@+id/linearLayout14"
-        android:layout_width="381dp"
+        android:layout_width="wrap_content"
         android:layout_height="114dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout13">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/navigateToAddFood"
-            android:layout_width="320dp"
+            android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_gravity="center"
             android:backgroundTint="@color/project_accent"
             app:cornerRadius="24dp"
             android:fontFamily="@font/montserrat_semibold"
@@ -218,9 +133,9 @@
             android:text="@string/add_new_food"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="20sp" />
-
+            android:textSize="18sp" />
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

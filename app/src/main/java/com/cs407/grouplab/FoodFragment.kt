@@ -71,12 +71,6 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
         noResultsTextView = view.findViewById(R.id.no_results_text_view)
         addFoodButton = view.findViewById(R.id.navigateToAddFood)
         scanButton = view.findViewById(R.id.jumptoscanpage)
-        carbReview = view.findViewById(R.id.carbReview)
-        proteinReview = view.findViewById(R.id.proteinReview)
-        fatReview = view.findViewById(R.id.fatReview)
-        fatLight = view.findViewById(R.id.fatLight)
-        proteinLight = view.findViewById(R.id.proteinLight)
-        carbLight = view.findViewById(R.id.carbLight)
 
 
 
@@ -143,21 +137,46 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
     }
 
     private fun performSearch(query: String) {
-        val db = AppDatabase.getDatabase(requireContext())
-        
         lifecycleScope.launch {
             db.foodItemDao().searchFoodItems("%$query%").collect { results ->
-                if (results.isNullOrEmpty()) {
-                    noResultsTextView.visibility = View.VISIBLE
-                    foodRecyclerView.visibility = View.GONE
-                } else {
-                    noResultsTextView.visibility = View.GONE
-                    foodRecyclerView.visibility = View.VISIBLE
-                    foodItemAdapter.setItems(results)
+                withContext(Dispatchers.Main) {
+                    if (results.isNullOrEmpty()) {
+                        noResultsTextView.visibility = View.VISIBLE
+                        foodRecyclerView.visibility = View.GONE
+                    } else {
+                        noResultsTextView.visibility = View.GONE
+                        foodRecyclerView.visibility = View.VISIBLE
+                        foodItemAdapter.setItems(results.map {
+                            FoodItem(
+                                name = it.name,
+                                protein = it.protein,
+                                carbs = it.carbs,
+                                fat = it.fat,
+                                id = 0,
+                                calories = it.calories,
+                                saturatedFat = 0,
+                                transFat = 0,
+                                polyUnsaturatedFat = 0,
+                                monoUnsaturatedFat = 0,
+                                cholesterol = 0,
+                                sodium = 0,
+                                potassium = 0,
+                                fiber = 0,
+                                sugar = 0,
+                                vitaminA = 0,
+                                vitaminB = 0,
+                                vitaminC = 0,
+                                vitaminD = 0,
+                                calcium = 0,
+                                iron = 0
+                            )
+                        })
+                    }
                 }
             }
         }
     }
+
 
     override fun onItemClick(foodItem: FoodItem) {
         showAddToLogDialog(foodItem)
