@@ -1,5 +1,6 @@
 package com.cs407.grouplab
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,14 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.room.Room
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cs407.grouplab.data.AppDatabase
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,25 +29,22 @@ class DailySummaryFragment : Fragment() {
     private lateinit var pieChart: PieChart
     private lateinit var dateButton: Button
     private lateinit var backButton: Button
-    private lateinit var dailySummaryTextView: TextView
+    private lateinit var dayTitle: TextView
+    private lateinit var nutritionDetails: TextView
     private lateinit var db: AppDatabase
-    private lateinit var userNutritionLogDao: UserNutritionLogDao
-
-    private val username = "test_user"
+    private var username: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Initialize database
-        db = Room.databaseBuilder(
-            requireContext().applicationContext,
-            AppDatabase::class.java,
-            "app_database"
-        ).build()
-        userNutritionLogDao = db.userNutritionLogDao()
+        // Use the singleton pattern to get database instance
+        db = AppDatabase.getDatabase(requireContext())
 
-        // Inflate layout
+        // Fetch the current logged-in username from SharedPreferences
+        val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        username = sharedPreferences.getString("logged_in_username", null)
+
         return inflater.inflate(R.layout.daily_summary, container, false)
     }
 
@@ -56,38 +55,25 @@ class DailySummaryFragment : Fragment() {
         pieChart = view.findViewById(R.id.chart)
         dateButton = view.findViewById(R.id.date_button)
         backButton = view.findViewById(R.id.back_button)
-        dailySummaryTextView = view.findViewById(R.id.daily_summary_text_view)
+        dayTitle = view.findViewById(R.id.day_title)
+        nutritionDetails = view.findViewById(R.id.nutrition_details)
 
-        // Set up initial date
-        val todayDate = getCurrentDate()
-        dateButton.text = todayDate
-
-        // Initial data fetch
-        fetchDailyData(todayDate)
-
-        // Set up click listeners
-        setupClickListeners()
-    }
-
-    private fun setupClickListeners() {
-        // Date picker button
-        dateButton.setOnClickListener {
-            showDatePicker()
+        // Check if username is null
+        if (username.isNullOrEmpty()) {
+            nutritionDetails.text = "Error: No logged-in user found. Please log in again."
+            return
         }
 
-        // Back button - Navigate to the previous fragment using parentFragmentManager
+        // Set today's date and fetch data
+        val todayDate = getCurrentDate()
+        dateButton.text = todayDate
+        fetchDailyData(todayDate)
+        fetchHistoricalData()
+
+        // Set up click listeners
+        dateButton.setOnClickListener { showDatePicker() }
         backButton.setOnClickListener {
-            val fragment = AppHomePageFragment()
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left
-                )
-                .replace(R.id.fragment_container, fragment) // Replace with the ID of your container
-                .addToBackStack(null) // Add to back stack for reverse navigation
-                .commit()
+            parentFragmentManager.popBackStack()
         }
     }
 
@@ -98,7 +84,6 @@ class DailySummaryFragment : Fragment() {
             .build()
 
         datePicker.show(parentFragmentManager, "datePicker")
-
         datePicker.addOnPositiveButtonClickListener { selection ->
             val selectedDate = convertMillisecondsToDate(selection)
             dateButton.text = selectedDate
@@ -107,86 +92,119 @@ class DailySummaryFragment : Fragment() {
     }
 
     private fun fetchDailyData(date: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                Log.d("DailySummary", "Fetching data for date: $date")
-                val dailyNutrition = userNutritionLogDao.getDailyNutrition(username, date)
+        // Ensure username is not null
+        if (username.isNullOrEmpty()) {
+            nutritionDetails.text = "Error: No logged-in user found."
+            return
+        }
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (dailyNutrition != null) {
-                        Log.d("DailySummary", "Data found: $dailyNutrition")
-                        updateUI(date, dailyNutrition)
-                    } else {
-                        Log.d("DailySummary", "No data found for date")
-                        dailySummaryTextView.text = "No data available for $date"
-                        clearChart()
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("DailySummary", "Error fetching data", e)
-                CoroutineScope(Dispatchers.Main).launch {
-                    dailySummaryTextView.text = "Error fetching data for $date"
-                    clearChart()
+        CoroutineScope(Dispatchers.IO).launch {
+            val nutrition = db.userNutritionLogDao().getDailyNutrition(username!!, date)
+            CoroutineScope(Dispatchers.Main).launch {
+                if (nutrition != null) {
+                    dayTitle.text = date
+                    nutritionDetails.text = """
+                        Calories: ${nutrition.totalCalories} kcal
+                        Protein: ${nutrition.totalProtein}g
+                        Carbs: ${nutrition.totalCarbs}g
+                        Fat: ${nutrition.totalFat}g
+                    """.trimIndent()
+                    setupPieChart(requireView(), nutrition.totalProtein.toFloat(),
+                        nutrition.totalFat.toFloat(), nutrition.totalCarbs.toFloat())
+                } else {
+                    dayTitle.text = "No Data"
+                    nutritionDetails.text = "No nutrition data available for $date."
+                    pieChart.clear()
                 }
             }
         }
     }
 
-    private fun updateUI(date: String, dailyNutrition: DailyNutritionSummary) {
-        // Update text summary
-        dailySummaryTextView.text = """
-            Date: $date
-            Username: $username
-            Calories: ${dailyNutrition.totalCalories} kcal
-            Protein: ${dailyNutrition.totalProtein}g
-            Carbs: ${dailyNutrition.totalCarbs}g
-            Fat: ${dailyNutrition.totalFat}g
-        """.trimIndent()
+    private fun setupPieChart(view: View, protein: Float, fat: Float, carbs: Float) {
+        val pieEntries = ArrayList<PieEntry>().apply {
+            if (protein > 0) add(PieEntry(protein, ""))  // Remove labels
+            if (fat > 0) add(PieEntry(fat, ""))
+            if (carbs > 0) add(PieEntry(carbs, ""))
+        }
 
-        // Update pie chart
-        updatePieChart(dailyNutrition)
-    }
-
-    private fun updatePieChart(dailyNutrition: DailyNutritionSummary) {
-        val pieEntries = listOf(
-            PieEntry(dailyNutrition.totalProtein.toFloat(), "Protein"),
-            PieEntry(dailyNutrition.totalCarbs.toFloat(), "Carbs"),
-            PieEntry(dailyNutrition.totalFat.toFloat(), "Fat")
+        val dataSet = PieDataSet(pieEntries, "")  // Remove title
+        val colors = listOf(
+            ContextCompat.getColor(requireContext(), R.color.protein_color),
+            ContextCompat.getColor(requireContext(), R.color.fat_color),
+            ContextCompat.getColor(requireContext(), R.color.carb_color)
         )
+        dataSet.colors = colors
+        dataSet.valueTextSize = 0f  // Hide values
 
-        val dataSet = PieDataSet(pieEntries, "Nutrition Breakdown").apply {
-            colors = ColorTemplate.COLORFUL_COLORS.toList()
-            valueTextSize = 16f
-            valueTextColor = resources.getColor(R.color.white, null)
+        val data = PieData(dataSet)
+        val chart = view.findViewById<PieChart>(R.id.chart)
+        chart.setHoleColor(ContextCompat.getColor(requireContext(), R.color.project_background))
+        chart.setTransparentCircleColor(ContextCompat.getColor(requireContext(), R.color.project_background))
+        chart.holeRadius = 40f
+        chart.legend.isEnabled = false
+        chart.description.isEnabled = false  // Hide description
+        chart.setDrawEntryLabels(false)  // Hide labels
+        chart.data = data
+        chart.animateY(2000)
+        chart.invalidate()
+    }
+
+    private fun fetchHistoricalData() {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val historicalData = mutableListOf<DailyNutritionSummary>()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            for (i in 1..7) {
+                calendar.add(Calendar.DAY_OF_YEAR, -1)
+                val date = dateFormat.format(calendar.time)
+                val nutrition = db.userNutritionLogDao().getDailyNutrition(username!!, date)
+                nutrition?.let { historicalData.add(it) }
+            }
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val recyclerView = view?.findViewById<RecyclerView>(R.id.history_recycler_view)
+                recyclerView?.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = NutritionHistoryAdapter(historicalData)
+                }
+            }
+        }
+    }
+
+    private fun getCurrentDate() = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    private fun convertMillisecondsToDate(milliseconds: Long) = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(milliseconds))
+
+    // Inner class for the RecyclerView adapter
+    inner class NutritionHistoryAdapter(private val nutritionList: List<DailyNutritionSummary>) :
+        RecyclerView.Adapter<NutritionHistoryAdapter.ViewHolder>() {
+
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val dateText: TextView = view.findViewById(R.id.date_text)
+            val caloriesText: TextView = view.findViewById(R.id.calories_text)
+            val macrosText: TextView = view.findViewById(R.id.macros_text)
         }
 
-        val pieData = PieData(dataSet)
-
-        pieChart.apply {
-            data = pieData
-            setEntryLabelTextSize(14f)
-            setEntryLabelColor(resources.getColor(R.color.white, null))
-            description.isEnabled = false
-            isRotationEnabled = false
-            legend.isEnabled = true
-            legend.textSize = 12f
-            legend.textColor = resources.getColor(R.color.black, null)
-            invalidate()
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.history_item, parent, false)
+            return ViewHolder(view)
         }
-    }
 
-    private fun clearChart() {
-        pieChart.clear()
-        pieChart.invalidate()
-    }
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val nutrition = nutritionList[position]
 
-    private fun getCurrentDate(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return sdf.format(Date())
-    }
+            // Create formatted date string
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, -(position + 1))
+            val dateFormat = SimpleDateFormat("MMM dd", Locale.getDefault())
+            val dateString = dateFormat.format(calendar.time)
 
-    private fun convertMillisecondsToDate(milliseconds: Long): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return sdf.format(Date(milliseconds))
+            holder.dateText.text = dateString
+            holder.caloriesText.text = "${nutrition.totalCalories} kcal"
+            holder.macrosText.text =
+                "P: ${nutrition.totalProtein}g  F: ${nutrition.totalFat}g  C: ${nutrition.totalCarbs}g"
+        }
+        override fun getItemCount() = nutritionList.size
     }
 }
