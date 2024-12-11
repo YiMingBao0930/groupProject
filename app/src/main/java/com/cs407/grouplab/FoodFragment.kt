@@ -71,7 +71,7 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
         noResultsTextView = view.findViewById(R.id.no_results_text_view)
         addFoodButton = view.findViewById(R.id.navigateToAddFood)
         scanButton = view.findViewById(R.id.jumptoscanpage)
-
+        foodReviewButton= view.findViewById(R.id.foodReviewButton)
 
         foodReviewButton.setOnClickListener {
             val fragment = Recommendation() // Create an instance of the Recommendation fragment
