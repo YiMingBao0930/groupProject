@@ -402,7 +402,8 @@ class AppHomePageFragment : Fragment() {
 
                         // Update calories
                         val totalCalories = dailyNutrition.totalCalories
-                        val goalCalories = 2000 // Get this from user goals
+                        val userGoal = db.userGoalDao().getUserGoal(username)
+                        val goalCalories = userGoal?.dailyCalories ?: 2000
                         view.findViewById<TextView>(R.id.calorie_num).text =
                             "$totalCalories/$goalCalories kCal"
                     } else {
