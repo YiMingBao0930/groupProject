@@ -94,7 +94,7 @@ class Recommendation : Fragment() {
         val backButton: ImageButton = view.findViewById(R.id.back_button)
 
         backButton.setOnClickListener {
-            val fragment = FoodFragment() // Create an instance of the Recommendation fragment
+            val fragment = AppHomePageFragment() // Create an instance of the Recommendation fragment
             parentFragmentManager.beginTransaction()
                 .setCustomAnimations(
                     R.anim.slide_in_right, // Optional animations

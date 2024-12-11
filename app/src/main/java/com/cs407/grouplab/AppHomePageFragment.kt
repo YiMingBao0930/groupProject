@@ -153,6 +153,20 @@ class AppHomePageFragment : Fragment() {
                         .commit()
                     true
                 }
+                R.id.nav_review -> {
+                    val fragment = Recommendation()
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left,
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left
+                        )
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                    true
+                }
                 else -> false
             }
         }
@@ -210,6 +224,21 @@ class AppHomePageFragment : Fragment() {
                         .setNegativeButton("No", null)
                         .show()
 
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
+                R.id.reminders -> {
+                    val fragment = RemindersFragment()
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left,
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left
+                        )
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
@@ -373,7 +402,8 @@ class AppHomePageFragment : Fragment() {
 
                         // Update calories
                         val totalCalories = dailyNutrition.totalCalories
-                        val goalCalories = 2000 // Get this from user goals
+                        val userGoal = db.userGoalDao().getUserGoal(username)
+                        val goalCalories = userGoal?.dailyCalories ?: 2000
                         view.findViewById<TextView>(R.id.calorie_num).text =
                             "$totalCalories/$goalCalories kCal"
                     } else {

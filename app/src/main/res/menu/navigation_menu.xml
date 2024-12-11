@@ -16,6 +16,11 @@
         android:title="@string/accountSetting"
         />
 
+    <item android:id="@+id/reminders"
+        android:icon="@drawable/baseline_notifications_24"
+        android:title="Meal Reminders"
+        />
+
     <item android:id="@+id/yourGoals"
         android:icon="@drawable/ic_your_goals"
         android:title="@string/yourGoals"
@@ -25,6 +30,7 @@
         android:icon="@drawable/ic_about"
         android:title="@string/about"
         />
+
     <item
         android:id="@+id/logout"
         android:icon="@drawable/baseline_logout_24"
