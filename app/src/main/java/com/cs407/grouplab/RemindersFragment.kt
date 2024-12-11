@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.cs407.grouplab.data.AppDatabase
 import com.google.android.material.appbar.MaterialToolbar
@@ -33,10 +35,30 @@ class RemindersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Toolbar back button handling
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
+        // Set up the Toolbar
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // Enable the back button in the toolbar
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = "" // Hide the toolbar title text
+        }
+
+        // Handle back button click
+        // Handle back button click to navigate to the home page
         toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            val homeFragment = AppHomePageFragment()
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+                .replace(R.id.fragment_container, homeFragment)
+                .commit()
         }
 
         // Check exact alarm permission for Android 12+
@@ -81,6 +103,7 @@ class RemindersFragment : Fragment() {
             .setTimeFormat(TimeFormat.CLOCK_12H)
             .setHour(hour)
             .setMinute(minute)
+            .setTheme(R.style.CustomTimePickerTheme)
             .setTitleText("Set $mealType reminder")
             .build()
 

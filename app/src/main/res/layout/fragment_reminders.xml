@@ -10,15 +10,17 @@
         android:orientation="vertical">
 
         <!-- Add the Toolbar Here -->
-        <com.google.android.material.appbar.MaterialToolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/project_background"
-            app:title="Meal Reminders"
-            app:titleTextColor="@color/white"
-            app:navigationIcon="@drawable/baseline_arrow_back_24"
-            app:navigationContentDescription="Back" />
+            android:paddingTop="30dp"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Existing Content -->
         <LinearLayout
