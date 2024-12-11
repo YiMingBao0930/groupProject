@@ -56,6 +56,7 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textColor="@color/project_accent"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textSize="36sp"
                         android:textStyle="bold" />
 
@@ -63,6 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Calories"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/project_hint"
                         android:textSize="16sp" />
 
@@ -70,6 +72,7 @@
                         android:id="@+id/distance_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:layout_marginTop="8dp"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -103,6 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Macronutrients"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -114,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Protein"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -132,6 +137,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Fat"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -149,7 +155,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Carbs"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:text="Carbohydrates"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -167,6 +174,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Fiber"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -185,6 +193,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Sugar"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -221,6 +230,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fat Breakdown"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -232,6 +242,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Trans Fat"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -248,6 +259,7 @@
                         android:id="@+id/polyunsaturated_fat_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:layout_marginTop="16dp"
                         android:text="Polyunsaturated Fat"
                         android:textColor="@color/white"
@@ -267,6 +279,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Monounsaturated Fat"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -301,6 +314,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Minerals"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -312,6 +326,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Sodium"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -330,6 +345,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Potassium"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -347,6 +363,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Calcium"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -365,6 +382,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Iron"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -399,6 +417,7 @@
                         android:layout_height="wrap_content"
                         android:text="Vitamins"
                         android:textColor="@color/white"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -407,6 +426,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Vitamin A"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
@@ -425,6 +445,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Vitamin B"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -440,6 +461,7 @@
                         android:id="@+id/vitamin_c_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:layout_marginTop="16dp"
                         android:text="Vitamin C"
                         android:textColor="@color/white"
@@ -458,6 +480,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Vitamin D"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
