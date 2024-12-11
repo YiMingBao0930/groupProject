@@ -90,6 +90,9 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
             }
         })
 
+        // Load initial data
+        performSearch("")
+
         // Set up the Toolbar
         val toolbar: Toolbar = view.findViewById(R.id.toolbar_food)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
@@ -138,40 +141,48 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
 
     private fun performSearch(query: String) {
         lifecycleScope.launch {
-            db.foodItemDao().searchFoodItems("%$query%").collect { results ->
-                withContext(Dispatchers.Main) {
-                    if (results.isNullOrEmpty()) {
-                        noResultsTextView.visibility = View.VISIBLE
-                        foodRecyclerView.visibility = View.GONE
-                    } else {
-                        noResultsTextView.visibility = View.GONE
-                        foodRecyclerView.visibility = View.VISIBLE
-                        foodItemAdapter.setItems(results.map {
-                            FoodItem(
-                                name = it.name,
-                                protein = it.protein,
-                                carbs = it.carbs,
-                                fat = it.fat,
-                                id = 0,
-                                calories = it.calories,
-                                saturatedFat = 0,
-                                transFat = 0,
-                                polyUnsaturatedFat = 0,
-                                monoUnsaturatedFat = 0,
-                                cholesterol = 0,
-                                sodium = 0,
-                                potassium = 0,
-                                fiber = 0,
-                                sugar = 0,
-                                vitaminA = 0,
-                                vitaminB = 0,
-                                vitaminC = 0,
-                                vitaminD = 0,
-                                calcium = 0,
-                                iron = 0
-                            )
-                        })
+            try {
+                val searchQuery = "%$query%"
+                db.foodItemDao().searchFoodItems(searchQuery).collect { results ->
+                    withContext(Dispatchers.Main) {
+                        if (results.isNullOrEmpty()) {
+                            noResultsTextView.visibility = View.VISIBLE
+                            foodRecyclerView.visibility = View.GONE
+                        } else {
+                            noResultsTextView.visibility = View.GONE
+                            foodRecyclerView.visibility = View.VISIBLE
+                            foodItemAdapter.setItems(results.map { food ->
+                                FoodItem(
+                                    id = food.id,
+                                    name = food.name,
+                                    calories = food.calories,
+                                    protein = food.protein,
+                                    carbs = food.carbs,
+                                    fat = food.fat,
+                                    saturatedFat = food.saturatedFat ?: 0,
+                                    transFat = food.transFat ?: 0,
+                                    polyUnsaturatedFat = food.polyUnsaturatedFat ?: 0,
+                                    monoUnsaturatedFat = food.monoUnsaturatedFat ?: 0,
+                                    cholesterol = food.cholesterol ?: 0,
+                                    sodium = food.sodium ?: 0,
+                                    potassium = food.potassium ?: 0,
+                                    fiber = food.fiber ?: 0,
+                                    sugar = food.sugar ?: 0,
+                                    vitaminA = food.vitaminA ?: 0,
+                                    vitaminB = food.vitaminB ?: 0,
+                                    vitaminC = food.vitaminC ?: 0,
+                                    vitaminD = food.vitaminD ?: 0,
+                                    calcium = food.calcium ?: 0,
+                                    iron = food.iron ?: 0
+                                )
+                            })
+                        }
                     }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Snackbar.make(requireView(), "Error searching foods: ${e.message}", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
