@@ -1,7 +1,6 @@
 package com.cs407.grouplab
 
 import AddToLogDialogFragment
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,69 +11,90 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.SearchView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.DialogFragment
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.cs407.grouplab.data.AppDatabase
-import com.cs407.grouplab.data.Food
-import com.google.android.material.snackbar.Snackbar
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import suggestCalorieIntake
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
-
-class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
+class Recommendation : Fragment() {
     private lateinit var db: AppDatabase
-
-    private lateinit var searchView: SearchView
-    private lateinit var foodRecyclerView: RecyclerView
-    private lateinit var noResultsTextView: TextView
-    private lateinit var suggestionsTextView : TextView
-    private lateinit var addFoodButton: Button
-    private lateinit var scanButton: ImageButton
-    private val foodItemAdapter = FoodItemAdapter(this)
+    private lateinit var userNutritionLogDao: UserNutritionLogDao
+    private val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     private lateinit var fatLight: ImageView
     private lateinit var carbLight: ImageView
     private lateinit var proteinLight: ImageView
     private lateinit var carbReview: TextView
     private lateinit var fatReview: TextView
     private lateinit var proteinReview: TextView
-    private lateinit var foodReviewButton: Button
+    private lateinit var sumEnergyFat: TextView
+    private lateinit var sumEnergyProtein: TextView
+    private lateinit var sumEnergyCarb: TextView
+    private lateinit var suggestedFat: TextView
+    private lateinit var suggestedProtein: TextView
+    private lateinit var suggestedCarb: TextView
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        db = AppDatabase.getDatabase(requireContext())
+        userNutritionLogDao = db.userNutritionLogDao()
+    }
+
+    private fun getCurrentUsername(): String? {
+        val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("logged_in_username", null)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.food, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.recommendation, container, false)
+
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        db = AppDatabase.getDatabase(requireContext())
-        // Find the TextView by its ID
 
+        // Fetch nutrition data and update UI
+        fetchNutritionData(view)
 
-        // Set an onClickListener
+        carbReview = view.findViewById(R.id.carbReview)
+        proteinReview = view.findViewById(R.id.proteinReview)
+        fatReview = view.findViewById(R.id.fatReview)
+        fatLight = view.findViewById(R.id.fatLight)
+        proteinLight = view.findViewById(R.id.proteinLight)
+        carbLight = view.findViewById(R.id.carbLight)
+        sumEnergyCarb = view.findViewById(R.id.sumEnergyCarb)
+        sumEnergyFat = view.findViewById(R.id.sumEnergyFat)
+        sumEnergyProtein = view.findViewById(R.id.sumEnergyProtein)
+        suggestedFat = view.findViewById(R.id.suggestedFat)
+        suggestedProtein = view.findViewById(R.id.suggestedProtein)
+        suggestedCarb = view.findViewById(R.id.suggestedCarb)
+        val backButton: ImageButton = view.findViewById(R.id.back_button)
 
-
-        searchView = view.findViewById(R.id.food_search_view)
-        foodRecyclerView = view.findViewById(R.id.food_recycler_view)
-        noResultsTextView = view.findViewById(R.id.no_results_text_view)
-        addFoodButton = view.findViewById(R.id.navigateToAddFood)
-        scanButton = view.findViewById(R.id.jumptoscanpage)
-
-
-        foodReviewButton.setOnClickListener {
-            val fragment = Recommendation() // Create an instance of the Recommendation fragment
+        backButton.setOnClickListener {
+            val fragment = FoodFragment() // Create an instance of the Recommendation fragment
             parentFragmentManager.beginTransaction()
                 .setCustomAnimations(
                     R.anim.slide_in_right, // Optional animations
@@ -87,128 +107,92 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
                 .commit()
         }
 
-
-        foodRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        foodRecyclerView.adapter = foodItemAdapter
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { performSearch(it) }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { performSearch(it) }
-                return true
-            }
-        })
-
-        // Load initial data
-        performSearch("")
-
-        // Set up the Toolbar
-        val toolbar: Toolbar = view.findViewById(R.id.toolbar_food)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-
-        // Enable the back button in the toolbar
-        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-            title = "" // Hide the toolbar title text
-        }
-
-        // Handle back button click
-        toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack() // Navigate back to the previous fragment
-        }
-
-        // Navigate to AddFoodFragment
-        addFoodButton.setOnClickListener {
-            val fragment = AddFoodFragment()
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
-        scanButton.setOnClickListener {
-            val fragment = ScanPageFragment()
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                 R.anim.slide_out_left,
-                 R.anim.slide_in_left,
-                    R.anim.slide_out_right
-            )
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
         loadUserStats(view)
     }
 
-    private fun performSearch(query: String) {
-        lifecycleScope.launch {
+    private val stepUpdateHandler = android.os.Handler()
+    private val stepUpdateRunnable = object : Runnable {
+        override fun run() {
+            val rootView = view ?: return
+            stepUpdateHandler.postDelayed(this, 30000) // Update every 30 seconds
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        stepUpdateHandler.post(stepUpdateRunnable)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        stepUpdateHandler.removeCallbacks(stepUpdateRunnable)
+    }
+
+
+
+    private fun fetchNutritionData(view: View) {
+        val username = getCurrentUsername()
+        if (username == null) {
+            // Handle case where user is not logged in
+            return
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val searchQuery = "%$query%"
-                db.foodItemDao().searchFoodItems(searchQuery).collect { results ->
-                    withContext(Dispatchers.Main) {
-                        if (results.isNullOrEmpty()) {
-                            noResultsTextView.visibility = View.VISIBLE
-                            foodRecyclerView.visibility = View.GONE
-                        } else {
-                            noResultsTextView.visibility = View.GONE
-                            foodRecyclerView.visibility = View.VISIBLE
-                            foodItemAdapter.setItems(results.map { food ->
-                                FoodItem(
-                                    id = food.id,
-                                    name = food.name,
-                                    calories = food.calories,
-                                    protein = food.protein,
-                                    carbs = food.carbs,
-                                    fat = food.fat,
-                                    saturatedFat = food.saturatedFat ?: 0,
-                                    transFat = food.transFat ?: 0,
-                                    polyUnsaturatedFat = food.polyUnsaturatedFat ?: 0,
-                                    monoUnsaturatedFat = food.monoUnsaturatedFat ?: 0,
-                                    cholesterol = food.cholesterol ?: 0,
-                                    sodium = food.sodium ?: 0,
-                                    potassium = food.potassium ?: 0,
-                                    fiber = food.fiber ?: 0,
-                                    sugar = food.sugar ?: 0,
-                                    vitaminA = food.vitaminA ?: 0,
-                                    vitaminB = food.vitaminB ?: 0,
-                                    vitaminC = food.vitaminC ?: 0,
-                                    vitaminD = food.vitaminD ?: 0,
-                                    calcium = food.calcium ?: 0,
-                                    iron = food.iron ?: 0
-                                )
-                            })
-                        }
+                val dailyNutrition = userNutritionLogDao.getDailyNutrition(username, currentDate)
+
+                withContext(Dispatchers.Main) {
+                    if (dailyNutrition != null) {
+                        // Update the pie chart with real data
+                        val protein = dailyNutrition.totalProtein.toFloat()
+                        val fat = dailyNutrition.totalFat.toFloat()
+                        val carbs = dailyNutrition.totalCarbs.toFloat()
+
+                        setupPieChart(view, protein, fat, carbs)
+
+                        // Update calories
+                    } else {
+                        // Show default values if no data exists
+                        setupPieChart(view, 0f, 0f, 0f)
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
-                    Snackbar.make(requireView(), "Error searching foods: ${e.message}", Snackbar.LENGTH_SHORT).show()
+                    // Show error state
+                    Toast.makeText(context, "Error loading nutrition data", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
+    private fun setupPieChart(view: View, protein: Float, fat: Float, carbs: Float) {
+        val pieEntries = ArrayList<PieEntry>().apply {
+            if (protein > 0) add(PieEntry(protein, "Protein"))
+            if (fat > 0) add(PieEntry(fat, "Fat"))
+            if (carbs > 0) add(PieEntry(carbs, "Carbohydrates"))
+        }
 
-    override fun onItemClick(foodItem: FoodItem) {
-        showAddToLogDialog(foodItem)
-    }
+        val dataSet = PieDataSet(pieEntries, "Your energy intake today")
+        val colors = listOf(
+            ContextCompat.getColor(requireContext(), R.color.protein_color),
+            ContextCompat.getColor(requireContext(), R.color.fat_color),
+            ContextCompat.getColor(requireContext(), R.color.carb_color)
+        )
+        dataSet.colors = colors
+        dataSet.valueTextSize = 14f
+        dataSet.valueTextColor = ContextCompat.getColor(requireContext(), android.R.color.white)
+        dataSet.valueTypeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_semibold)
 
-    private fun showAddToLogDialog(foodItem: FoodItem) {
-        val dialog = AddToLogDialogFragment(foodItem)
-        dialog.show(parentFragmentManager, "AddToLogDialogFragment")
+        val data = PieData(dataSet)
+        val chart = view.findViewById<PieChart>(R.id.chart)
+        chart.setHoleColor(ContextCompat.getColor(requireContext(), R.color.project_background))
+        chart.setTransparentCircleColor(ContextCompat.getColor(requireContext(), R.color.project_background))
+        chart.holeRadius = 40f
+        chart.legend.isEnabled = false
+        chart.data = data
+        chart.animateY(2000)
+        chart.invalidate()
     }
 
     private fun loadUserStats(view: View) {
@@ -225,12 +209,12 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
                     val recommendedCalories = userGoal?.dailyCalories ?: 2000
 
                     // Calculate recommended macros
-                    val recommendedCarbs = userGoal?.carbGram ?: (recommendedCalories * 0.5 / 4).toInt() // 50% from carbs
-                    val recommendedCarbsMax = userGoal?.carbGram ?: (recommendedCalories * 0.65 / 4).toInt() // 65% from carbs
-                    val recommendedProtein = userGoal?.proteinGram ?: (recommendedCalories * 0.1 / 4).toInt() // 10% from protein
-                    val recommendedProteinMax = userGoal?.proteinGram ?: (recommendedCalories * 0.35 / 4).toInt() // 35% from protein
-                    val recommendedFat = userGoal?.fatGram ?: (recommendedCalories * 0.2 / 9).toInt() // 20% from fat
-                    val recommendedFatMax = userGoal?.fatGram ?: (recommendedCalories * 0.35 / 9).toInt() // 35% from fat
+                    val recommendedCarbs = (recommendedCalories * 0.3).toInt()
+                    val recommendedCarbsMax = (recommendedCalories * 0.5).toInt()
+                    val recommendedProtein = (recommendedCalories * 0.25).toInt()
+                    val recommendedProteinMax = (recommendedCalories * 0.35).toInt()
+                    val recommendedFat = (recommendedCalories * 0.2).toInt()
+                    val recommendedFatMax = (recommendedCalories * 0.35).toInt()
 
 
                     // Retrieve daily nutrition log
@@ -241,6 +225,19 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
                         val totalCarbs = dailyNutrition.totalCarbs
                         val totalFat = dailyNutrition.totalFat
                         val totalProtein = dailyNutrition.totalProtein
+
+                        sumEnergyFat.text = totalFat.toString()
+                        sumEnergyProtein.text = dailyNutrition.totalProtein.toString()
+                        sumEnergyCarb.text = dailyNutrition.totalCarbs.toString()
+                        val suggestedFatMin = recommendedFat
+                        val suggestedFatMax = recommendedFatMax
+                        suggestedFat.text = "$suggestedFatMin - $suggestedFatMax"
+                        val suggestedProteinMin = recommendedProtein
+                        val suggestedProteinMax = recommendedProteinMax
+                        suggestedProtein.text = "$suggestedProteinMin - $suggestedProteinMax"
+                        val suggestedCarbMin = recommendedCarbs
+                        val suggestedCarbMax = recommendedCarbsMax
+                        suggestedCarb.text = "$suggestedCarbMin - $suggestedCarbMax"
 
                         when {
                             totalCarbs < recommendedCarbs -> {
@@ -294,8 +291,4 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
             }
         }
     }
-
-
-
 }
-
