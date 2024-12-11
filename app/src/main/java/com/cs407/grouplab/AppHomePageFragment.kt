@@ -330,9 +330,9 @@ class AppHomePageFragment : Fragment() {
                         setupPieChart(view, protein, fat, carbs)
                         
                         // Update the nutrition text views
-                        view.findViewById<TextView>(R.id.protein_num).text = "${protein.toInt()}g"
-                        view.findViewById<TextView>(R.id.fat_num).text = "${fat.toInt()}g"
-                        view.findViewById<TextView>(R.id.acrbs_num).text = "${carbs.toInt()}g"
+                        view.findViewById<TextView>(R.id.protein_num).text = "${protein.toInt()}g\n"+ "Protein"
+                        view.findViewById<TextView>(R.id.fat_num).text = "${fat.toInt()}g\n"+ "Fat"
+                        view.findViewById<TextView>(R.id.acrbs_num).text = "${carbs.toInt()}g\n"+ "Carbs"
                         
                         // Update calories
                         val totalCalories = dailyNutrition.totalCalories
@@ -343,9 +343,9 @@ class AppHomePageFragment : Fragment() {
                         // Show default values if no data exists
                         setupPieChart(view, 0f, 0f, 0f)
                         // Update text views to show 0
-                        view.findViewById<TextView>(R.id.protein_num).text = "0g"
-                        view.findViewById<TextView>(R.id.fat_num).text = "0g"
-                        view.findViewById<TextView>(R.id.acrbs_num).text = "0g"
+                        view.findViewById<TextView>(R.id.protein_num).text = "0g\n" + "Protein"
+                        view.findViewById<TextView>(R.id.fat_num).text = "0g\n" + "Fat"
+                        view.findViewById<TextView>(R.id.acrbs_num).text = "0g\n" + "Carbs"
                         view.findViewById<TextView>(R.id.calorie_num).text = "0/2000 kCal"
                     }
                 }
