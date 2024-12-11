@@ -78,6 +78,7 @@ class DailySummaryFragment : Fragment() {
     private fun showDatePicker() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select Date")
+            .setTheme(R.style.CustomMaterialDatePicker)
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 

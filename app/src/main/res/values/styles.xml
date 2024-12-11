@@ -27,5 +27,18 @@
 
     </style>
 
+    <style name="CustomAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <!-- Background color -->
+        <item name="colorSurface">@color/project_sub</item>
+        <!-- Title and message text color -->
+        <item name="colorOnSurface">@color/white</item>
+        <!-- Button colors -->
+        <item name="buttonStyle">@style/CustomDialogButton</item>
+    </style>
+
+    <style name="CustomDialogButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/project_accent</item>
+    </style>
+
 
 </resources>

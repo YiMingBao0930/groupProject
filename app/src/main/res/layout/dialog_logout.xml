@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@color/project_sub">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@color/project_sub">
+
+        <TextView
+            android:id="@+id/dialog_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Are you sure you want to logout?"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_semibold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logout_confirm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/dialog_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/project_accent"
+            app:cornerRadius="24dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center"
+            android:text="Logout"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logout_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/dialog_message"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/project_accent"
+            app:cornerRadius="24dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

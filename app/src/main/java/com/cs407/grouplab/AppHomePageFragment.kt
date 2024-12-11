@@ -4,6 +4,7 @@ import AddToLogDialogFragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.button.MaterialButton
 
 class AppHomePageFragment : Fragment() {
     private lateinit var db: AppDatabase
@@ -180,10 +182,15 @@ class AppHomePageFragment : Fragment() {
                     true
                 }
                 R.id.logout -> {
-                    androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                        .setTitle("Logout")
-                        .setMessage("Are you sure you want to logout?")
-                        .setPositiveButton("Yes") { _, _ ->
+                    val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_logout, null)
+
+                    val alertDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setView(dialogView)
+                        .create()
+
+                    // Set button actions
+                    dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.logout_confirm_button)
+                        .setOnClickListener {
                             val sharedPreferences = requireContext()
                                 .getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
                             sharedPreferences.edit().apply {
@@ -206,13 +213,21 @@ class AppHomePageFragment : Fragment() {
                                 "Logged out successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }
-                        .setNegativeButton("No", null)
-                        .show()
 
+                            alertDialog.dismiss()
+                        }
+
+                    dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.logout_cancel_button)
+                        .setOnClickListener {
+                            alertDialog.dismiss()
+                        }
+
+                    alertDialog.show()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+
+
                 R.id.reminders -> {
                     val fragment = RemindersFragment()
                     parentFragmentManager.beginTransaction()
