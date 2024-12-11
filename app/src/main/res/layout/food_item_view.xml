@@ -1,28 +1,94 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This is the layout for individual items displayed in the RecyclerView -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:background="@drawable/darkest_gray_rounded_corners"
+    android:padding="8dp"
+    android:layout_margin="8dp">
 
     <TextView
         android:id="@+id/food_name"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:fontFamily="@font/montserrat_semibold"
-        android:textSize="18sp"
         android:textColor="@color/white"
-        android:text="Food Name" />
+        android:textSize="18sp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:paddingBottom="4dp"
+        android:text="Food Name Placeholder" />
 
     <TextView
         android:id="@+id/food_calories"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:fontFamily="@font/montserrat_semibold"
         android:textColor="@color/white"
-        android:text="Calories" />
+        android:textSize="14sp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:paddingBottom="8dp"
+        android:text="Calories Placeholder" />
+
+    <LinearLayout
+        android:id="@+id/macros_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/powder_blue_rounded_corners"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_yellow_circle"
+            android:contentDescription="@string/circle" />
+
+        <TextView
+            android:id="@+id/protein_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Protein: 0g" />
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="0dp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_orange_circle"
+            android:contentDescription="@string/circle" />
+
+        <TextView
+            android:id="@+id/carbs_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Carbs: 0g" />
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="0dp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_blue_circle"
+            android:contentDescription="@string/circle" />
+
+        <TextView
+            android:id="@+id/fat_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Fat: 0g" />
+    </LinearLayout>
 </LinearLayout>

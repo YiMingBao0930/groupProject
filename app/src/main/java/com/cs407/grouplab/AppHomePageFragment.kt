@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.appcompat.app.AlertDialog
 
 class AppHomePageFragment : Fragment() {
     private lateinit var db: AppDatabase
@@ -178,7 +179,43 @@ class AppHomePageFragment : Fragment() {
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+                R.id.logout -> {
+                    androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Logout")
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            val sharedPreferences = requireContext()
+                                .getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                            sharedPreferences.edit().apply {
+                                remove("logged_in_username")
+                                apply()
+                            }
+
+                            parentFragmentManager.beginTransaction()
+                                .setCustomAnimations(
+                                    R.anim.slide_in_left,
+                                    R.anim.slide_out_right,
+                                    R.anim.slide_in_left,
+                                    R.anim.slide_out_right
+                                )
+                                .replace(R.id.fragment_container, LoginFragment())
+                                .commit()
+
+                            Toast.makeText(
+                                requireContext(),
+                                "Logged out successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        .setNegativeButton("No", null)
+                        .show()
+
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
                 else -> {
+                    // Add a debug Toast to see which menu item was clicked
+                    Toast.makeText(requireContext(), "Clicked: ${menuItem.title}", Toast.LENGTH_SHORT).show()
                     drawerLayout.closeDrawer(GravityCompat.START)
                     false
                 }
@@ -326,18 +363,18 @@ class AppHomePageFragment : Fragment() {
                         val protein = dailyNutrition.totalProtein.toFloat()
                         val fat = dailyNutrition.totalFat.toFloat()
                         val carbs = dailyNutrition.totalCarbs.toFloat()
-                        
+
                         setupPieChart(view, protein, fat, carbs)
-                        
+
                         // Update the nutrition text views
                         view.findViewById<TextView>(R.id.protein_num).text = "${protein.toInt()}g\n"+ "Protein"
                         view.findViewById<TextView>(R.id.fat_num).text = "${fat.toInt()}g\n"+ "Fat"
                         view.findViewById<TextView>(R.id.acrbs_num).text = "${carbs.toInt()}g\n"+ "Carbs"
-                        
+
                         // Update calories
                         val totalCalories = dailyNutrition.totalCalories
                         val goalCalories = 2000 // Get this from user goals
-                        view.findViewById<TextView>(R.id.calorie_num).text = 
+                        view.findViewById<TextView>(R.id.calorie_num).text =
                             "$totalCalories/$goalCalories kCal"
                     } else {
                         // Show default values if no data exists

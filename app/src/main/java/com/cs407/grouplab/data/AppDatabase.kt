@@ -38,9 +38,9 @@ import java.util.Date
         StepRecord::class,
         CaloriesRecord::class,
         Exercise::class,
-        ExerciseLog:: class
+        ExerciseLog::class
     ],
-    version = 3, // Increment the version number
+    version = 4, 
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)

@@ -49,7 +49,6 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
     private lateinit var carbReview: TextView
     private lateinit var fatReview: TextView
     private lateinit var proteinReview: TextView
-    private lateinit var button: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,35 +62,18 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
         db = AppDatabase.getDatabase(requireContext())
         // Find the TextView by its ID
 
+
         // Set an onClickListener
+
 
         searchView = view.findViewById(R.id.food_search_view)
         foodRecyclerView = view.findViewById(R.id.food_recycler_view)
         noResultsTextView = view.findViewById(R.id.no_results_text_view)
         addFoodButton = view.findViewById(R.id.navigateToAddFood)
         scanButton = view.findViewById(R.id.jumptoscanpage)
-        carbReview = view.findViewById(R.id.carbReview)
-        proteinReview = view.findViewById(R.id.proteinReview)
-        fatReview = view.findViewById(R.id.fatReview)
-        fatLight = view.findViewById(R.id.fatLight)
-        proteinLight = view.findViewById(R.id.proteinLight)
-        carbLight = view.findViewById(R.id.carbLight)
-        button = view.findViewById(R.id.button)
 
 
-        button.setOnClickListener {
-            val fragment = Recommendation() // Create an instance of the Recommendation fragment
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right, // Optional animations
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-                .replace(R.id.fragment_container, fragment) // Replace with the ID of your fragment container
-                .addToBackStack(null) // Add to back stack to allow navigation back
-                .commit()
-        }
+
 
         foodRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         foodRecyclerView.adapter = foodItemAdapter
@@ -107,6 +89,9 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
                 return true
             }
         })
+
+        // Load initial data
+        performSearch("")
 
         // Set up the Toolbar
         val toolbar: Toolbar = view.findViewById(R.id.toolbar_food)
@@ -155,21 +140,54 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
     }
 
     private fun performSearch(query: String) {
-        val db = AppDatabase.getDatabase(requireContext())
-        
         lifecycleScope.launch {
-            db.foodItemDao().searchFoodItems("%$query%").collect { results ->
-                if (results.isNullOrEmpty()) {
-                    noResultsTextView.visibility = View.VISIBLE
-                    foodRecyclerView.visibility = View.GONE
-                } else {
-                    noResultsTextView.visibility = View.GONE
-                    foodRecyclerView.visibility = View.VISIBLE
-                    foodItemAdapter.setItems(results)
+            try {
+                val searchQuery = "%$query%"
+                db.foodItemDao().searchFoodItems(searchQuery).collect { results ->
+                    withContext(Dispatchers.Main) {
+                        if (results.isNullOrEmpty()) {
+                            noResultsTextView.visibility = View.VISIBLE
+                            foodRecyclerView.visibility = View.GONE
+                        } else {
+                            noResultsTextView.visibility = View.GONE
+                            foodRecyclerView.visibility = View.VISIBLE
+                            foodItemAdapter.setItems(results.map { food ->
+                                FoodItem(
+                                    id = food.id,
+                                    name = food.name,
+                                    calories = food.calories,
+                                    protein = food.protein,
+                                    carbs = food.carbs,
+                                    fat = food.fat,
+                                    saturatedFat = food.saturatedFat ?: 0,
+                                    transFat = food.transFat ?: 0,
+                                    polyUnsaturatedFat = food.polyUnsaturatedFat ?: 0,
+                                    monoUnsaturatedFat = food.monoUnsaturatedFat ?: 0,
+                                    cholesterol = food.cholesterol ?: 0,
+                                    sodium = food.sodium ?: 0,
+                                    potassium = food.potassium ?: 0,
+                                    fiber = food.fiber ?: 0,
+                                    sugar = food.sugar ?: 0,
+                                    vitaminA = food.vitaminA ?: 0,
+                                    vitaminB = food.vitaminB ?: 0,
+                                    vitaminC = food.vitaminC ?: 0,
+                                    vitaminD = food.vitaminD ?: 0,
+                                    calcium = food.calcium ?: 0,
+                                    iron = food.iron ?: 0
+                                )
+                            })
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Snackbar.make(requireView(), "Error searching foods: ${e.message}", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
 
     override fun onItemClick(foodItem: FoodItem) {
         showAddToLogDialog(foodItem)
