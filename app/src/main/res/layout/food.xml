@@ -19,9 +19,9 @@
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         android:layout_marginStart="21dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="116dp"
         android:layout_marginEnd="21dp"
         android:background="@drawable/gray_rounded_corners"
         android:orientation="vertical"
@@ -52,7 +52,7 @@
             android:layout_width="343dp"
             android:layout_height="wrap_content"
             android:tooltipText="ex. carrot"
-            android:background="@drawable/gray_rounded_corners" />
+            android:background="@drawable/light_gray_rounded_corners" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/food_recycler_view"
@@ -75,63 +75,40 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout10"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="250dp"
-        android:background="@drawable/gray_rounded_corners"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/back_button">
-
-        <TextView
-            android:id="@+id/suggestionsTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Recommendation"
-            android:textSize="35sp" />
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout13"
-        android:layout_width="369dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
         android:layout_marginTop="20dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout10">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout8">
+
+        <TextView
+            android:id="@+id/scan_food_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/scan_food_barcode"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_semibold"
+            android:layout_marginBottom="8dp" />
 
         <ImageButton
             android:id="@+id/jumptoscanpage"
-            android:layout_gravity="center_horizontal"
             android:backgroundTint="@color/project_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/barcodespro_upca" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout14"
-        android:layout_width="381dp"
-        android:layout_height="114dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout13">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/navigateToAddFood"
             android:layout_width="320dp"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:backgroundTint="@color/project_accent"
             app:cornerRadius="24dp"
@@ -141,8 +118,8 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="20sp" />
-
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

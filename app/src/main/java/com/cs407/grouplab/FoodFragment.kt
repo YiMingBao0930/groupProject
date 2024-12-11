@@ -47,16 +47,6 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Find the TextView by its ID
-        val recommendationTextView: TextView = view.findViewById(R.id.suggestionsTextView)
-
-        // Set an onClickListener
-        recommendationTextView.setOnClickListener {
-            // Navigate to a new activity
-            val intent = Intent(requireContext(), Recommendation::class.java)
-            startActivity(intent)
-        }
-
         searchView = view.findViewById(R.id.food_search_view)
         foodRecyclerView = view.findViewById(R.id.food_recycler_view)
         noResultsTextView = view.findViewById(R.id.no_results_text_view)

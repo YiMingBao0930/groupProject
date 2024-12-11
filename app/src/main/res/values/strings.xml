@@ -68,5 +68,6 @@
     <string name="exercise_time_hint">Enter time spent (minutes)</string>
     <string name="confirm_add_exercise">Confirm</string>
     <string name="recommendation_title">Today\'s Recommendations</string>
+    <string name="scan_food_barcode">Add Food With Barcode</string>
 
 </resources>
