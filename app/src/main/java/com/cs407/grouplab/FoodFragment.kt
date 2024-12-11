@@ -49,7 +49,7 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
     private lateinit var carbReview: TextView
     private lateinit var fatReview: TextView
     private lateinit var proteinReview: TextView
-
+    private lateinit var foodReviewButton: Button
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,6 +73,19 @@ class FoodFragment : Fragment(), FoodItemAdapter.OnItemClickListener {
         scanButton = view.findViewById(R.id.jumptoscanpage)
 
 
+        foodReviewButton.setOnClickListener {
+            val fragment = Recommendation() // Create an instance of the Recommendation fragment
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right, // Optional animations
+                    R.anim.slide_out_left,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+                .replace(R.id.fragment_container, fragment) // Replace with the ID of your fragment container
+                .addToBackStack(null) // Add to back stack to allow navigation back
+                .commit()
+        }
 
 
         foodRecyclerView.layoutManager = LinearLayoutManager(requireContext())

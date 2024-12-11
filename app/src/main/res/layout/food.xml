@@ -80,7 +80,6 @@
     </LinearLayout>
 
 
-
     <LinearLayout
         android:id="@+id/linearLayout13"
         android:layout_width="wrap_content"
@@ -95,8 +94,8 @@
             android:id="@+id/scan_food_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/montserrat_semibold"
             android:text="Scan Food into Database"
             android:textColor="@color/white"
@@ -118,8 +117,8 @@
         android:layout_height="114dp"
         android:layout_marginTop="20dp"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout13">
 
         <com.google.android.material.button.MaterialButton
@@ -127,15 +126,35 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:backgroundTint="@color/project_accent"
-            app:cornerRadius="24dp"
             android:fontFamily="@font/montserrat_semibold"
             android:gravity="center"
             android:text="@string/add_new_food"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:cornerRadius="24dp" />
+
     </LinearLayout>
 
+    <Button
+        android:id="@+id/foodReviewButton"
+        android:layout_width="143dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/yellow"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center"
+        android:text="View current diet reviews>"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="8sp"
+        app:cornerRadius="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginStart="100dp"
+        tools:layout_editor_absoluteX="250dp" />
 
-s
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
