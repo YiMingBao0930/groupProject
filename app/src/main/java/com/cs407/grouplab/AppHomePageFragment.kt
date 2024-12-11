@@ -227,6 +227,21 @@ class AppHomePageFragment : Fragment() {
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
+                R.id.reminders -> {
+                    val fragment = RemindersFragment()
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left,
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left
+                        )
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
                 else -> {
                     // Add a debug Toast to see which menu item was clicked
                     Toast.makeText(requireContext(), "Clicked: ${menuItem.title}", Toast.LENGTH_SHORT).show()
