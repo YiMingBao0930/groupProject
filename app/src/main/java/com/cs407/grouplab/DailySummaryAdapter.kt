@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -66,7 +67,12 @@ class DailySummaryAdapter : RecyclerView.Adapter<DailySummaryAdapter.DayViewHold
         )
 
         val dataSet = PieDataSet(entries, "Nutrition")
-        dataSet.colors = ColorTemplate.COLORFUL_COLORS.toList()
+        val colors = listOf(
+            ContextCompat.getColor(chart.context, R.color.protein_color),
+            ContextCompat.getColor(chart.context, R.color.fat_color),
+            ContextCompat.getColor(chart.context, R.color.carb_color)
+        )
+        dataSet.colors = colors
 
         val data = PieData(dataSet)
         chart.data = data

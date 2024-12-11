@@ -400,7 +400,7 @@ class AppHomePageFragment : Fragment() {
         val pieEntries = ArrayList<PieEntry>().apply {
             if (protein > 0) add(PieEntry(protein, "Protein"))
             if (fat > 0) add(PieEntry(fat, "Fat"))
-            if (carbs > 0) add(PieEntry(carbs, "Carbohydrates"))
+            if (carbs > 0) add(PieEntry(carbs, "Carbs"))
         }
 
         val dataSet = PieDataSet(pieEntries, "Your energy intake today")
@@ -419,7 +419,10 @@ class AppHomePageFragment : Fragment() {
         chart.setHoleColor(ContextCompat.getColor(requireContext(), R.color.project_background))
         chart.setTransparentCircleColor(ContextCompat.getColor(requireContext(), R.color.project_background))
         chart.holeRadius = 40f
+        chart.transparentCircleRadius = 45f
         chart.legend.isEnabled = false
+        chart.description.isEnabled = false
+        chart.setDrawEntryLabels(false)
         chart.data = data
         chart.animateY(2000)
         chart.invalidate()

@@ -122,19 +122,19 @@ class DailySummaryFragment : Fragment() {
 
     private fun setupPieChart(view: View, protein: Float, fat: Float, carbs: Float) {
         val pieEntries = ArrayList<PieEntry>().apply {
-            if (protein > 0) add(PieEntry(protein, ""))  // Remove labels
-            if (fat > 0) add(PieEntry(fat, ""))
-            if (carbs > 0) add(PieEntry(carbs, ""))
+            if (protein > 0) add(PieEntry(protein, "Protein"))
+            if (fat > 0) add(PieEntry(fat, "Fat"))
+            if (carbs > 0) add(PieEntry(carbs, "Carbs"))
         }
 
-        val dataSet = PieDataSet(pieEntries, "")  // Remove title
+        val dataSet = PieDataSet(pieEntries, "")
         val colors = listOf(
             ContextCompat.getColor(requireContext(), R.color.protein_color),
             ContextCompat.getColor(requireContext(), R.color.fat_color),
             ContextCompat.getColor(requireContext(), R.color.carb_color)
         )
         dataSet.colors = colors
-        dataSet.valueTextSize = 0f  // Hide values
+        dataSet.valueTextSize = 0f
 
         val data = PieData(dataSet)
         val chart = view.findViewById<PieChart>(R.id.chart)
@@ -142,8 +142,8 @@ class DailySummaryFragment : Fragment() {
         chart.setTransparentCircleColor(ContextCompat.getColor(requireContext(), R.color.project_background))
         chart.holeRadius = 40f
         chart.legend.isEnabled = false
-        chart.description.isEnabled = false  // Hide description
-        chart.setDrawEntryLabels(false)  // Hide labels
+        chart.description.isEnabled = false
+        chart.setDrawEntryLabels(false)
         chart.data = data
         chart.animateY(2000)
         chart.invalidate()
