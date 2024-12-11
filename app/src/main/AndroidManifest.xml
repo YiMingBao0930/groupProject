@@ -40,7 +40,8 @@
         <activity android:name=".DailySummary"/>
         <activity android:name=".ExerciseMenu"/>
         <activity android:name=".JumpTracker"/>
-        <activity android:name=".Recommendation"></activity>
+        <activity android:name=".Recommendation"/>
+
 
 
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"

@@ -58,7 +58,7 @@ class AddToLogDialogFragment(private val foodItem: FoodItem) : DialogFragment() 
     }
 
     private fun addToLog() {
-        val servings = servingInput.text.toString().toIntOrNull()
+        val servings = servingInput.text.toString().toFloatOrNull()
         if (servings == null || servings <= 0) {
             Snackbar.make(requireView(), "Invalid serving size", Snackbar.LENGTH_SHORT).show()
             return

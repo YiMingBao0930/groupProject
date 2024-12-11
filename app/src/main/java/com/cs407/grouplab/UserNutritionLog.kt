@@ -24,5 +24,5 @@ data class UserNutritionLog(
     val username: String,
     val date: String, // Format: YYYY-MM-DD
     val foodItemId: Int, // Links to FoodItem
-    val quantity: Int // Number of servings consumed
+    val quantity: Float // Float to allow for partial servings
 )

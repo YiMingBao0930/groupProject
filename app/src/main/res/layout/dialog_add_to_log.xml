@@ -49,9 +49,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/serving_input"
                 android:layout_width="match_parent"
-                android:fontFamily="@font/montserrat_semibold"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textColor="@color/white"
                 app:hintTextColor="@color/hint_color_state" />
 
