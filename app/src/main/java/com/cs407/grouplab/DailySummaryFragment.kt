@@ -11,6 +11,8 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -59,7 +61,6 @@ class DailySummaryFragment : Fragment() {
         // Initialize views
         pieChart = view.findViewById(R.id.chart)
         dateButton = view.findViewById(R.id.date_button)
-        backButton = view.findViewById(R.id.back_button)
         dayTitle = view.findViewById(R.id.day_title)
 
         // Set today's date and fetch data
@@ -70,8 +71,30 @@ class DailySummaryFragment : Fragment() {
 
         // Set up click listeners
         dateButton.setOnClickListener { showDatePicker() }
-        backButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+        // Set up the Toolbar
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar_food)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // Enable the back button in the toolbar
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = "" // Hide the toolbar title text
+        }
+
+        // Handle back button click
+        // Handle back button click to navigate to the home page
+        toolbar.setNavigationOnClickListener {
+            val homeFragment = AppHomePageFragment()
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+                .replace(R.id.fragment_container, homeFragment)
+                .commit()
         }
     }
 

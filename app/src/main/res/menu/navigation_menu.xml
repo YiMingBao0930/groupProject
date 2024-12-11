@@ -15,6 +15,7 @@
     <item android:id="@+id/review"
         android:icon="@drawable/ic_review"
         android:title="@string/review"
+        android:iconTint="@color/white"
         />
 
     <item

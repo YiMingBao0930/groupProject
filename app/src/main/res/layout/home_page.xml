@@ -212,6 +212,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/project_accent"
+        android:background="@color/project_sub"
         app:menu="@menu/navigation_menu"
         app:itemIconSize="40dp" />
 
