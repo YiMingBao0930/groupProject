@@ -44,7 +44,7 @@ class FoodItemAdapter(private val listener: OnItemClickListener) : RecyclerView.
             proteinTextView.text = "${foodItem.protein}g"
             carbsTextView.text = "${foodItem.carbs}g"
             fatTextView.text = "${foodItem.fat}g"
-            caloriesTextView.text = "${foodItem.calories} kCal"
+            caloriesTextView.text = "${foodItem.calories} Calories"
         }
     }
 }

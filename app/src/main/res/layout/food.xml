@@ -53,7 +53,7 @@
 
         <SearchView
             android:id="@+id/food_search_view"
-            android:layout_width="343dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/light_gray_rounded_corners"
             android:tooltipText="ex. carrot" />
